@@ -20,4 +20,8 @@ public class ApiV1 {
     public JsonObject info() {
         return client.doGet("/info", "info", null);
     }
+
+    public void shutdown() {
+        client.shutdown();
+    }
 }

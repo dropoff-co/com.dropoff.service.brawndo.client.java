@@ -34,34 +34,25 @@ This is the 3rd party dropoff Java client for creating and viewing orders.
 
 Instantiate an instance of ApiV1 in order to start making calls to brawndo.
 
-    using System;
-    using Dropoff;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-    
-    namespace DropoffExample
-    {
-        class Program
-        {
-            static void Main(string[] args)
-            {
-                ApiV1 brawndo = new ApiV1();
-            }
+    import com.dropoff.service.brawndo.client.java.api.ApiV1;
+        
+    public class DropoffExample {
+        public static void main(String[] args) {
+            ApiV1 brawndo = new ApiV1();
         }
     }
-
 
 ### Configuration <a id="configuration"></a>
 
 You will then have to configure the brawndo instance with the configure function.
 
-    string api_url = "https://sandbox-brawndo.dropoff.com/v1";
-    string host = "sandbox-brawndo.dropoff.com";
-    string private_key = "fcb60b8680d7b5c67921a852b39067a19d85318ce8abf4c512";
-    string public_key = "ced2eaf24f1eaf832c1ea92b41386b4a5982cfcdb69b7c7818";
+    String url = "https://sandbow-brawndo.dropoff.com/v1";
+    String host = "sandbox-brawndo.dropoff.com";
+    String private_key = "fcb60b8680d7b5c67921a852b39067a19d85318ce8abf4c512";
+    String public_key = "ced2eaf24f1eaf832c1ea92b41386b4a5982cfcdb69b7c7818";
+        
+    brawndo.initialize(url, host, private_key, public_key);
 
-    brawndo.Initialize(api_url, host, private_key, public_key);
-            
 * **api_url** - the url of the brawndo api.  This field is required.
 * **host** - the api host.  This field is required.
 * **public_key** - the public key of the user that will be using the client.  This field is required.
@@ -74,9 +65,9 @@ If you want to know your client id and name you can access this information via 
 
 If you are an enterprise client user, then this call will return all of the accounts that you are allowed to manage with your current account.
 
-    JObject info = brawndo.Info();
+    JsonObject info = brawndo.info();
     
-Note that it returns a JObject instance.  The Java brawndo api has a dependency on google-gson library (included in DropoffApi.jar).  You can get more information on that [here](https://github.com/google/gson).
+Note that it returns a JsonObject instance.  The Java brawndo api has a dependency on google-gson library (included in DropoffApi.jar).  You can get more information on that [here](https://github.com/google/gson).
     
 A response will look like this:
 
@@ -207,21 +198,35 @@ The following api documentation will show how to do this.
 Before you place an order you will first want to estimate the distance, eta, and cost for the delivery.  The client provides an **Estimate** function for this operation.
 
     EstimateParameters estimateParams = new EstimateParameters();
-    estimateParams.origin = "117 San Jacinto Blvd, Austin, TX 78701";
-    estimateParams.destination = "901 S MoPac Expy, Austin, TX 78746";
-    estimateParams.utc_offset = DateTime.Now.ToString("zzz");
-    //  ************************************************
-    //  ***** Optional ready_timestamp calculation *****
-    DateTime tomorrow = DateTime.Now.AddDays(1);
-    DateTime tomorrowTenAM = new DateTime(tomorrow.Year, tomorrow.Month, tomorrow.Day, 10, 0, 0, 0);
-    estimateParams.utc_offset = tomorrowTenAM.ToString("zzz");
-    DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-    TimeSpan diff = tomorrowTenAM.ToUniversalTime() - origin;
-    estimateParams.ready_timestamp = (Int32)Math.Floor(diff.TotalSeconds);
-    //  ***** End optional ready_timestamp calculation *****
-    //  ****************************************************
-    JObject estimate = brawndo.order.Estimate(estimateParams);
-
+    estimateParams.setOrigin("117 San Jacinto Blvd, Austin, TX 78701");
+    estimateParams.setDestination("901 S MoPac Expy, Austin, TX 78746");
+    SimpleDateFormat sdf = new SimpleDateFormat("zzz");
+    estimateParams.setUtc_offset(sdf.format(new Date()));
+        
+    /******************************************
+    /* Optional ready_timestamp calculation
+    Calendar tomorrowTenAM = Calendar.getInstance();
+    tomorrowTenAM.setTime(new Date());
+    tomorrowTenAM.set(Calendar.HOUR_OF_DAY, 0);
+    tomorrowTenAM.set(Calendar.MINUTE, 0);
+    tomorrowTenAM.set(Calendar.SECOND, 0);
+    tomorrowTenAM.add(Calendar.DATE, 1);
+    tomorrowTenAM.add(Calendar.HOUR, 10);
+    estimateParams.setUtc_offset(sdf.format(tomorrowTenAM.getTime()));
+    Calendar origin = Calendar.getInstance();
+    origin.setTime(new Date(0));
+    long diff = (tomorrowTenAM.getTimeInMillis() - origin.getTimeInMillis())/1000;
+    estimateParams.setReady_timestamp(diff);
+    /* End Optional ready_timestamp calculation
+    /******************************************
+        
+    JsonObject estimate = null;
+    try {
+        estimate = brawndo.order.estimate(estimateParams);
+    } catch (IllegalArgumentException iae) {
+        iae.printStackTrace();
+    }
+    
 * **origin** - the origin (aka the pickup location) of the order.  Required.
 * **destination** - the destination (aka the delivery location) of the order.  Required.
 * **utc_offset** - the utc offset of the timezone where the order is taking place.  Required.
@@ -283,37 +288,41 @@ Given a successful estimate call, and a time window that you like, an order can 
 The origin and destination contain information regarding the addresses in the order.
 
     OrderCreateParameters orderCreateParams = new OrderCreateParameters();
-    
-    orderCreateParams.origin = new OrderCreateAddress();
-    orderCreateParams.origin.company_name = "Gus's Fried Chicken";
-    orderCreateParams.origin.first_name = "Napoleon";
-    orderCreateParams.origin.last_name = "Bonner";
-    orderCreateParams.origin.address_line_1 = "117 San Jacinto Blvd";
-    //orderCreateParams.origin.address_line_2 = "";
-    orderCreateParams.origin.city = "Austin";
-    orderCreateParams.origin.state = "TX";
-    orderCreateParams.origin.zip = "78701";
-    orderCreateParams.origin.phone = "5125555555";
-    orderCreateParams.origin.email = "cluckcluck@gusfriedchicken.com";
-    orderCreateParams.origin.lat = 30.263706;
-    orderCreateParams.origin.lng = -97.741703;
-    //orderCreateParams.origin.remarks = "";
-    
-    orderCreateParams.destination = new OrderCreateAddress();
-    orderCreateParams.destination.company_name = "Dropoff";
-    orderCreateParams.destination.first_name = "Algis";
-    orderCreateParams.destination.last_name = "Woss";
-    orderCreateParams.destination.address_line_1 = "901 S MoPac Expy";
-    orderCreateParams.destination.address_line_2 = "#150";
-    orderCreateParams.destination.city = "Austin";
-    orderCreateParams.destination.state = "TX";
-    orderCreateParams.destination.zip = "78746";
-    orderCreateParams.destination.phone = "512-555-5555";
-    orderCreateParams.destination.email = "awoss@dropoff.com";
-    orderCreateParams.destination.lat = 30.264573;
-    orderCreateParams.destination.lng = -97.782073;
-    orderCreateParams.destination.remarks = "Please use the front entrance.  The back one is guarded by cats!";
-
+        
+    OrderCreateAddress originParams = new OrderCreateAddress();
+    originParams.setCompany_name("Gus's Fried Chicken");
+    originParams.setFirst_name("Napoleon");
+    originParams.setLast_name("Bonner");
+    originParams.setAddress_line_1("117 San Jacinto Blvd");
+    //originParams.setAddress_line_2("");
+    originParams.setCity("Austin");
+    originParams.setState("TX");
+    originParams.setZip("78701");
+    originParams.setPhone("5125555555");
+    originParams.setEmail("cluckcluck@gusfriedchicken.com");
+    originParams.setLat(30.263706);
+    originParams.setLng(-97.741703);
+    originParams.setRemarks("Origin Remarks");
+        
+    orderCreateParams.setOrigin(originParams);
+        
+    OrderCreateAddress destinationParams = new OrderCreateAddress();
+    destinationParams.setCompany_name("Dropoff");
+    destinationParams.setFirst_name("Jason");
+    destinationParams.setLast_name("Kastner");
+    destinationParams.setAddress_line_1("901 S MoPac Expy");
+    destinationParams.setAddress_line_2("#150");
+    destinationParams.setCity("Austin");
+    destinationParams.setState("TX");
+    destinationParams.setZip("78746");
+    destinationParams.setPhone("512-555-5555");
+    destinationParams.setEmail("jkastner+java+dropoff@dropoff.com");
+    destinationParams.setLat(30.264573);
+    destinationParams.setLng(-97.782073);
+    destinationParams.setRemarks("Please use the front entrance. The back one is guarded by cats!");
+        
+    orderCreateParams.setDestination(destinationParams);
+            
 * **address\_line\_1** - the street information for the origin or destination.  Required.
 * **address\_line\_2** - additional information for the address for the origin or destination (ie suite number).  Optional.
 * **company_name** - the name of the business for the origin or destination.  Required.
@@ -332,17 +341,19 @@ The origin and destination contain information regarding the addresses in the or
 
 The details contain attributes about the order
 
-    orderCreateParams.details = new OrderCreateDetails();
-    orderCreateParams.details.ready_date = (Int32)Math.Floor(diff.TotalSeconds);
-    orderCreateParams.details.type = "two_hr";
-    orderCreateParams.details.quantity = 10;
-    orderCreateParams.details.weight = 20;
-    //  We are using the pricing for the two_hr time frame 
-    //  for the estimate result we called earlier
-    orderCreateParams.details.distance = (string) estimate["data"]["two_hr"]["Distance"];
-    orderCreateParams.details.eta = (string) estimate["data"]["two_hr"]["ETA"];
-    orderCreateParams.details.price = (string)estimate["data"]["two_hr"]["Price"];
-
+    OrderCreateDetails details = new OrderCreateDetails();
+    details.setReady_date(diff);
+    details.setType("two_hr");
+    details.setQuantity(10);
+    details.setWeight(20);
+    // We are using the pricing for the two_hr time frame
+    // for the estimate result we called earlier
+    details.setDistance(estimate.get("data").getAsJsonObject().get("Distance").getAsString());
+    details.setEta(estimate.get("data").getAsJsonObject().get("ETA").getAsString());
+    details.setPrice(estimate.get("data").getAsJsonObject().get("two_hr").getAsJsonObject().get("Price").getAsString());
+        
+    orderCreateParams.setDetails(details);
+            
 * **quantity** - the number of packages in the order. Required.
 * **weight** - the weight of the packages in the order.  **A heavier order could be subject to a price adjustment.** Required.
 * **eta** - the eta from the origin to the destination.  Should use the value retrieved in the getEstimate call. Required.
@@ -355,32 +366,31 @@ The details contain attributes about the order
 
 Once this data is created, you can create the order.
 
-    JObject createResponse = brawndo.order.Create(orderCreateParams);
-
+    JsonObject createResponse = brawndo.order.create(orderCreateParams);
+    
 Note that if you want to create this order on behalf of a managed client as an enterprise client user you will need to specify the company_id.
 
-    orderCreateParams.company_id = "1111111111111";
-    JObject createResponse = brawndo.order.Create(orderCreateParams);
-
+    orderCreateParams.setCompany_id("1111111111111");
+    JsonObject createResponse = brawndo.order.create(orderCreateParams);
+    
 The data in the callback will contain the id of the new order as well as the url where you can track the order progress.
     
-    string created_order_id = (string)createResponse["data"]["order_id"];
-    string created_order_url = (string)createResponse["data"]["url"];
-
+    String created_order_id = createResponse.get("data").getAsJsonObject().get("order_id").getAsString();
+    String created_order_url = createResponse.get("data").getAsJsonObject().get("url").getAsString();
 
 ### Cancelling an order <a id="cancel"></a>
 
-    OrderCancelParameters cancelParameters = new OrderCancelParameters();
-    cancelParameters.order_id = created_order_id;
-    JObject cancelResult = brawndo.order.Cancel();
+    OrderCancelParameters cancelParams = new OrderCancelParameters();
+    cancelParams.setOrder_id(created_order_id);
+    JsonObject cancelResponse = brawndo.order.cancel(cancelParams);
 
 	
 If you are trying to cancel an order for a manage client order as an enterprise client user, include the company_id in the argument parameters
 
-	 OrderCancelParameters cancelParameters = new OrderCancelParameters();
-    cancelParameters.order_id = created_order_id;
-    cancelParameters.company_id = "1111111111111";
-    JObject cancelResult = brawndo.order.Cancel();
+    OrderCancelParameters cancelParams = new OrderCancelParameters();
+    cancelParams.setOrder_id(created_order_id);
+    cancelParams.setCompany_id("1111111111111");
+    JsonObject cancelResponse = brawndo.order.cancel(cancelParams);
     
 * **order_id** - the id of the order to cancel.
 * **company_id** - if you are using brawndo as an enterprise client that manages other dropoff clients you can specify the managed client id who you would like to cancel an order for. This is optional and only works for enterprise clients.
@@ -403,7 +413,7 @@ An example of a succesful cancel result is:
 ### Getting a specific order <a id="specific"></a>
 
     OrderGetParameters orderGetParams = new OrderGetParameters();
-    orderGetParams.order_id = "zzzz-zzzz-zzz";
+    orderGetParams.setOrder_id("06ex-r3zV-BMb");
 
 Example response
 
@@ -415,24 +425,24 @@ Example response
                  createdate: 1425653646,
                  updatedate: 1425653646,
                  order_status_code: 0,
-                 company_name: 'Dropoff Inc.',
-                 first_name: 'Algis',
-                 last_name: 'Woss',
-                 address_line_1: '800 Brazos Street',
-                 address_line_2: '250',
+                 company_name: 'Dropoff',
+                 first_name: 'Jason',
+                 last_name: 'Kastner',
+                 address_line_1: '901 S MoPac Expy',
+                 address_line_2: '#150',
                  city: 'Austin',
                  state: 'TX',
-                 zip: '78701',
-                 phone_number: '8444376763',
-                 email_address: 'deliveries@dropoff.com',
-                 lng: -97.740838,
-                 lat: 30.269967
+                 zip: '78746',
+                 phone_number: '512-555-5555',
+                 email_address: 'jkastner+java+dropoff@dropoff.com',
+                 lng: -97.782073,
+                 lat: 30.264573
              },
              details: {
                  order_id: 'ac156e24a24484a382f66b8cadf6fa83',
                  short_id: '06ex-r3zV-BMb',
                  createdate: 1425653646,
-                 customer_name: 'Algis Woss',
+                 customer_name: 'Jason Kastner',
                  type: 'ASAP',
                  market: 'austin',
                  timezone: 'America/Chicago',
@@ -445,8 +455,8 @@ Example response
                  pickupETA: 'TBD',
                  deliveryETA: '243.1',
                  signature_exists: 'NO',
-                 quantity: 1,
-                 weight: 5,
+                 quantity: 10,
+                 weight: 20,
                  readyforpickupdate: 1425578400,
                  updatedate: 1425653646
              },
@@ -480,40 +490,39 @@ Example response
 Get the first page of orders
 
     OrderGetParameters orderGetParams = new OrderGetParameters();
-    JObject page = brawndo.order.Get(orderGetParams);
+    JsonObject page = brawndo.order.get(orderGetParams);
+
 
 Get a page of orders after the last_key from a previous response
 
     OrderGetParameters nextPageParams = new OrderGetParameters();
-    string page1LastKey = (string)page["last_key"];
-    
-    if (page["last_key"] != null)
-    {
-        nextPageParams.last_key = (string) page["last_key"];
-    }
+    String page1LastKey = page.get("last_key").getAsString();
 
-    JObject nextPage = brawndo.order.Get(nextPageParams);
+    if (page.get("last_key") != null) {
+        nextPageParams.setLast_key(page.get("last_key").getAsString());
+    }
+            
+    JsonObject page = brawndo.order.get(nextPageParams);
+
 
 Get the first page of orders as an enterprise client user for a managed client
 
 
     OrderGetParameters orderGetParams = new OrderGetParameters();
-    orderGetParams.company_id = "1111111111111";
-    JObject page = brawndo.order.Get(orderGetParams);
+    orderGetParams.setCompany_id("1111111111111");
+    JsonObject page = brawndo.order.get(orderGetParams);
     
 Get a page of orders after the last_key from a previous response as an enterprise client user for a managed client
 
     OrderGetParameters nextPageParams = new OrderGetParameters();
-    nextPageParams.company_id = "1111111111111";
-    
-    string page1LastKey = (string)page["last_key"];
-    
-    if (page["last_key"] != null)
-    {
-        nextPageParams.last_key = (string) page["last_key"];
-    }
+    nextPageParams.setCompany_id("1111111111111");
+    String page1LastKey = page.get("last_key").getAsString();
 
-    JObject nextPage = brawndo.order.Get(nextPageParams);
+    if (page.get("last_key") != null) {
+        nextPageParams.setLast_key(page.get("last_key").getAsString());
+    }
+            
+    JsonObject page = brawndo.order.get(nextPageParams);
 
 Example response
 
@@ -534,47 +543,47 @@ You can create, delete, and read tips for individual orders.  Please note that t
 
 Tip creation requires two parameters, the order id **(order_id)** and the tip amount **(amount)**.
 
-    TipParameters tipParameters = new TipParameters();
-    tipParameters.order_id = created_order_id;
-    tipParameters.amount = 4.44;
-    JObject tipResponse = brawndo.order.tip.Create(tipParameters);
+    TipParameters tipParams = new TipParameters();
+    tipParams.setOrder_id(created_order_id);
+    tipParams.setAmount(4.44);            
+    JsonObject tipResponse = brawndo.order.tip.create(tipParams);
 
 ### Deleting a tip <a id="tip_delete"></a>
 
 Tip deletion only requires the order id **(order_id)**.
 
-    TipParameters tipParameters = new TipParameters();
-    tipParameters.order_id = created_order_id;
-    JObject tipResponse = brawndo.order.tip.Delete(tipParameters);
-	
+    TipParameters tipParams = new TipParameters();
+    tipParams.setOrder_id(created_order_id);
+    JsonObject tipResponse = brawndo.order.tip.delete(tipParams);
+
 If you are trying to delete a tip on a managed client order as an enterprise client user, include the company_id in the argument parameters
 
-    TipParameters tipParameters = new TipParameters();
-    tipParameters.order_id = created_order_id;
-    tipParameters.company_id = "1111111111111";
-    JObject tipResponse = brawndo.order.tip.Delete(tipParameters);
+    TipParameters tipParams = new TipParameters();
+    tipParams.setOrder_id(created_order_id);
+    tipParams.setCompany_id("1111111111111");
+    JsonObject tipResponse = brawndo.order.tip.delete(tipParams);
 
 ### Reading a tip <a id="tip_read"></a>
 
 Tip reading only requires the order id **(order_id)**.
 
-    TipParameters tipParameters = new TipParameters();
-    tipParameters.order_id = created_order_id;
-    JObject tipResposne = brawndo.order.Get(tipParameters);
-	
+    TipParameters tipParams = new TipParameters();
+    tipParams.setOrder_id(created_order_id);
+    JsonObject tipResponse = brawndo.order.tip.get(tipParams);
+
 If you are trying to read a tip on a manage client order as an enterprise client user, include the company_id in the argument parameters
 
-    TipParameters tipParameters = new TipParameters();
-    tipParameters.order_id = created_order_id;
-    tipParameters.company_id = "1111111111111";
-    JObject tipResposne = brawndo.order.Get(tipParameters);
+    TipParameters tipParams = new TipParameters();
+    tipParams.setOrder_id(created_order_id);
+    tipParams.setCompany_id("1111111111111");
+    JsonObject tipResponse = brawndo.order.tip.get(tipParams);
 
 Example response:
 
 	{
 		amount: "4.44"
 		createdate: "2016-02-18T16:46:52+00:00"
-		description: "Tip added by Dropoff(Algis Woss)"
+		description: "Tip added by Dropoff(Jason Kastner)"
 		updatedate: "2016-02-18T16:46:52+00:00"
 	}
 
@@ -704,4 +713,11 @@ The simulation will create an order, assign it to a simulation agent, and move t
 
 **You can only run a simulation once every fifteen minutes, and only in the sandbox.**
 
-    brawndo.order.Simulate("austin");
+    brawndo.order.simulate("austin");
+
+### Shutting down the client<a id="shutdown"></a>
+
+When you are done using the client, a shutdown is required to stop the executor
+from holding on to resources
+
+    brawndo.shutdown();

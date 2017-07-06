@@ -100,18 +100,18 @@ public class DropoffApp {
 
         System.out.println("------------------------------");
         System.out.println("Getting Order Estimate 2");
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.add(Calendar.DATE, 1);
-        cal.add(Calendar.HOUR, 10);
-        estimateParams.setUtc_offset(sdf.format(cal.getTime()));
+        Calendar tomorrowTenAM = Calendar.getInstance();
+        tomorrowTenAM.setTime(new Date());
+        tomorrowTenAM.set(Calendar.HOUR_OF_DAY, 0);
+        tomorrowTenAM.set(Calendar.MINUTE, 0);
+        tomorrowTenAM.set(Calendar.SECOND, 0);
+        tomorrowTenAM.add(Calendar.DATE, 1);
+        tomorrowTenAM.add(Calendar.HOUR, 10);
+        estimateParams.setUtc_offset(sdf.format(tomorrowTenAM.getTime()));
 
         Calendar origin = Calendar.getInstance();
         origin.setTime(new Date(0));
-        Long diff = new Long((cal.getTimeInMillis() - origin.getTimeInMillis())/1000);
+        long diff = (tomorrowTenAM.getTimeInMillis() - origin.getTimeInMillis())/1000;
         estimateParams.setReady_timestamp(diff);
 
         try {
@@ -216,5 +216,8 @@ public class DropoffApp {
         System.out.println("++++++++++++++++++++++++++++++");
         System.out.println("++++++++++++++++++++++++++++++");
         System.out.println("Cancelled Order: " + cancelResponse.toString());
+
+        //brawndo.order.simulate("austin");
+        brawndo.shutdown();
     }
 }

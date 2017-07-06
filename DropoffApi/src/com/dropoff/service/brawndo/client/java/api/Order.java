@@ -109,6 +109,6 @@ public class Order {
             throw new IllegalArgumentException("market should not be null");
         }
 
-        return client.doGet("/order/simulate" + market, "order", null);
+        return client.doGet("/order/simulate/" + market, "order", null);
     }
 }
