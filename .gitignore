@@ -1,7 +1,10 @@
-# IntelliJ files
+# IntelliJ files and directories
+out
+.idea
 *.iml
 
 # Compiled class file
+META-INF
 *.class
 
 # Log file
