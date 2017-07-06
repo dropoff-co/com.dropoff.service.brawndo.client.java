@@ -2,6 +2,7 @@ package com.dropoff.service.brawndo.client.java.api;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,6 +17,10 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -36,6 +41,7 @@ public class Client {
     private String publicKey;
     private HttpURLConnection client;
     private SimpleDateFormat sdf = null;
+    private ExecutorService executor = null;
 
     private static final String HMAC_SHA512_ALGORITHM = "HmacSHA512";
 
@@ -45,6 +51,7 @@ public class Client {
         this.host = host;
         this.privateKey = privateKey;
         this.publicKey = publicKey;
+        this.executor = Executors.newFixedThreadPool(1);
 
         /*try {
             url = new URL(this.apiUrl);
@@ -68,6 +75,10 @@ public class Client {
 
             }
         };*/
+    }
+
+    public void shutdown() {
+        executor.shutdown();
     }
 
     private String getXDropoffDate() {
@@ -97,8 +108,39 @@ public class Client {
         return toHex(mac.doFinal(input.getBytes())).toLowerCase();
     }
 
+    private class Request implements Callable<Response> {
+        private String httpMethod;
+        private String path;
+        private String resource;
+        private Map<String,String> query;
+        private String payload;
+
+        public Request(String httpMethod, String path, String resource, Map<String,String> query, String payload) {
+            this.httpMethod = httpMethod;
+            this.path = path;
+            this.resource = resource;
+            this.query = query;
+            this.payload = payload;
+        }
+        public Response call() throws Exception {
+            return new Response(doRequest(httpMethod,path,resource,query,payload));
+        }
+    }
+
+    private class Response {
+        private JsonObject respObj;
+
+        public Response(JsonObject respObj) {
+            this.respObj = respObj;
+        }
+
+        public JsonObject getRespObj() {
+            return respObj;
+        }
+    }
+
     private JsonObject doRequest(String httpMethod, String path, String resource, Map<String,String> query,
-                                 String payload) throws Exception {
+                                 String payload) throws IOException, NoSuchAlgorithmException, SignatureException, InvalidKeyException {
             String x_dropoff_date = this.getXDropoffDate();
             x_dropoff_date = x_dropoff_date.replace("-","");
 
@@ -121,7 +163,6 @@ public class Client {
                 }
             }
 
-            System.out.println(url);
             URL obj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -187,13 +228,10 @@ public class Client {
             String firstKey = "dropoff" + this.privateKey;
             String finalHash = "";
             String authHash = "";
-            try {
-                finalHash = this.doHMAC(x_dropoff_date.substring(0, 8), firstKey);
-                finalHash = this.doHMAC(resource, finalHash);
-                authHash = this.doHMAC(finalStringToHash, finalHash);
-            } catch (Exception e) {
-                throw (e);
-            }
+
+            finalHash = this.doHMAC(x_dropoff_date.substring(0, 8), firstKey);
+            finalHash = this.doHMAC(resource, finalHash);
+            authHash = this.doHMAC(finalStringToHash, finalHash);
 
             String authHeader = "";
             authHeader += "Authorization: HMAC-SHA512 Credential=" + this.publicKey;
@@ -238,32 +276,38 @@ public class Client {
     }
 
     public JsonObject doGet(String path, String resource, Map<String,String> query) {
-        JsonObject task = null;
+        JsonObject result = null;
         try {
-            task = this.doRequest("GET", path, resource, query, null);
+            //result = this.doRequest("GET", path, resource, query, null);
+            Future<Response> response = executor.submit(new Request("GET", path, resource, query, null));
+            result = response.get().getRespObj();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return task;
+        return result;
     }
 
     public JsonObject doPost(String path, String resource, String payload, Map<String,String> query) {
-        JsonObject task = null;
+        JsonObject result = null;
         try {
-            task = this.doRequest("POST", path, resource, query, payload);
+            //result = this.doRequest("POST", path, resource, query, payload);
+            Future<Response> response = executor.submit(new Request("POST", path, resource, query, payload));
+            result = response.get().getRespObj();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return task;
+        return result;
     }
 
     public JsonObject doDelete(String path, String resource, Map<String,String> query) {
-        JsonObject task = null;
+        JsonObject result = null;
         try {
-            task = this.doRequest("DELETE", path, resource, query, null);
+            //result = this.doRequest("DELETE", path, resource, query, null);
+            Future<Response> response = executor.submit(new Request("DELETE", path, resource, query, null));
+            result = response.get().getRespObj();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return task;
+        return result;
     }
 }
