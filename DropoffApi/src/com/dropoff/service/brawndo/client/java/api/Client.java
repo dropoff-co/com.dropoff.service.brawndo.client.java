@@ -52,29 +52,6 @@ public class Client {
         this.privateKey = privateKey;
         this.publicKey = publicKey;
         this.executor = Executors.newFixedThreadPool(1);
-
-        /*try {
-            url = new URL(this.apiUrl);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        this.client = new HttpURLConnection(url) {
-            @Override
-            public void disconnect() {
-
-            }
-
-            @Override
-            public boolean usingProxy() {
-                return false;
-            }
-
-            @Override
-            public void connect() throws IOException {
-
-            }
-        };*/
     }
 
     public void shutdown() {
