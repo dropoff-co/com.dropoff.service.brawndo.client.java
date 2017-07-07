@@ -17,12 +17,12 @@ public class DropoffApp {
     public static void main(String[] args) {
         System.out.println("HelloWorld!");
         ApiV1 brawndo = new ApiV1();
-        String url = "http://localhost:9094/v1";
-        //String url = "https://sandbow-brawndo.dropoff.com/v1";
-        String host = "localhost:9094";
-        //String host = "sandbox-brawndo.dropoff.com";
-        String private_key = "74ac377c478a9fbd05203b3125db3f6402ead2d2ce1b9fa936c04fce43d8c168";
-        String public_key = "11981f9d4c223a598fd2a550568064a259c08c367ce6d46cde2a47026b5e4bcb";
+        //String url = "http://localhost:9094/v1";
+        String url = "https://sandbow-brawndo.dropoff.com/v1";
+        //String host = "localhost:9094";
+        String host = "sandbox-brawndo.dropoff.com";
+        String private_key = "";
+        String public_key = "";
 
         brawndo.initialize(url, host, private_key, public_key);
         System.out.println("------------------------------");
@@ -83,8 +83,8 @@ public class DropoffApp {
         System.out.println("------------------------------");
         System.out.println("Getting Order Estimate");
         EstimateParameters estimateParams = new EstimateParameters();
-        estimateParams.setOrigin("3544 RR 620 South, Bee Cave, TX 78738");
-        estimateParams.setDestination("800 Brazos Street, Austin, TX 78701");
+        estimateParams.setOrigin("117 San Jacinto Blvd, Austin, TX 78701");
+        estimateParams.setDestination("901 S MoPac Expy, Austin, TX 78746");
         SimpleDateFormat sdf = new SimpleDateFormat("zzz");
         estimateParams.setUtc_offset(sdf.format(new Date()));
         JsonObject estimate = null;
@@ -129,18 +129,18 @@ public class DropoffApp {
         OrderCreateParameters orderCreateParams = new OrderCreateParameters();
         //orderCreateParams.setCompany_id("3e8e7d4a596ae41448d7e9c55a3a79bc");
         OrderCreateAddress originParams = new OrderCreateAddress();
-        originParams.setCompany_name("Jason's House");
-        originParams.setFirst_name("Jason");
-        originParams.setLast_name("Kastner");
-        originParams.setAddress_line_1("3544 RR 620 South");
+        originParams.setCompany_name("Gus's Fried Chicken");
+        originParams.setFirst_name("Napoleon");
+        originParams.setLast_name("Bonner");
+        originParams.setAddress_line_1("117 San Jacinto Blvd");
         //originParams.setAddress_line_2("");
-        originParams.setCity("Bee Cave");
+        originParams.setCity("Austin");
         originParams.setState("TX");
-        originParams.setZip("78738");
-        originParams.setPhone("5555555555");
-        originParams.setEmail("jkastner+java@dropoff.com");
-        originParams.setLat(30.3215456);
-        originParams.setLng(-97.9591534);
+        originParams.setZip("78701");
+        originParams.setPhone("5125555555");
+        originParams.setEmail("cluckcluck@gusfriedchicken.com");
+        originParams.setLat(30.263706);
+        originParams.setLng(-97.741703);
         originParams.setRemarks("Origin Remarks");
         orderCreateParams.setOrigin(originParams);
 
@@ -148,16 +148,16 @@ public class DropoffApp {
         destinationParams.setCompany_name("Dropoff");
         destinationParams.setFirst_name("Jason");
         destinationParams.setLast_name("Kastner");
-        destinationParams.setAddress_line_1("800 Brazos Street");
-        destinationParams.setAddress_line_2("Suite 250");
+        destinationParams.setAddress_line_1("901 S MoPac Expy");
+        destinationParams.setAddress_line_2("#150");
         destinationParams.setCity("Austin");
         destinationParams.setState("TX");
-        destinationParams.setZip("78701");
-        destinationParams.setPhone("555-555-5555");
+        destinationParams.setZip("78746");
+        destinationParams.setPhone("512-555-5555");
         destinationParams.setEmail("jkastner+java+dropoff@dropoff.com");
-        destinationParams.setLat(30.2700705);
-        destinationParams.setLng(-97.7432062);
-        destinationParams.setRemarks("Destination Remarks");
+        destinationParams.setLat(30.264573);
+        destinationParams.setLng(-97.782073);
+        destinationParams.setRemarks("Please use the front entrance. The back on is guarded by cats!");
         orderCreateParams.setDestination(destinationParams);
 
         OrderCreateDetails details = new OrderCreateDetails();
