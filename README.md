@@ -29,6 +29,7 @@ This is the 3rd party dropoff Java client for creating and viewing orders.
     - [Webhook Events](#events)
     - [Managed Client Events](#managed_client_events)
   + [Order Simulation](#simulation)
+  + [Client Shutdown](#shutdown)
 
 ## Using the client <a id="client"></a>
 
@@ -201,22 +202,20 @@ Before you place an order you will first want to estimate the distance, eta, and
     estimateParams.setOrigin("117 San Jacinto Blvd, Austin, TX 78701");
     estimateParams.setDestination("901 S MoPac Expy, Austin, TX 78746");
     SimpleDateFormat sdf = new SimpleDateFormat("zzz");
-    estimateParams.setUtc_offset(sdf.format(new Date()));
+    estimateParams.setUtcOffset(sdf.format(new Date()));
         
     /******************************************
     /* Optional ready_timestamp calculation
-    Calendar tomorrowTenAM = Calendar.getInstance();
-    tomorrowTenAM.setTime(new Date());
-    tomorrowTenAM.set(Calendar.HOUR_OF_DAY, 0);
-    tomorrowTenAM.set(Calendar.MINUTE, 0);
-    tomorrowTenAM.set(Calendar.SECOND, 0);
-    tomorrowTenAM.add(Calendar.DATE, 1);
-    tomorrowTenAM.add(Calendar.HOUR, 10);
-    estimateParams.setUtc_offset(sdf.format(tomorrowTenAM.getTime()));
-    Calendar origin = Calendar.getInstance();
-    origin.setTime(new Date(0));
-    long diff = (tomorrowTenAM.getTimeInMillis() - origin.getTimeInMillis())/1000;
-    estimateParams.setReady_timestamp(diff);
+	Calendar tomorrowTenAM = Calendar.getInstance();
+	tomorrowTenAM.setTime(new Date());
+	tomorrowTenAM.set(Calendar.HOUR_OF_DAY, 0);
+	tomorrowTenAM.set(Calendar.MINUTE, 0);
+	tomorrowTenAM.set(Calendar.SECOND, 0);
+	tomorrowTenAM.add(Calendar.DATE, 1);
+	tomorrowTenAM.add(Calendar.HOUR, 10);
+	estimateParams.setUtcOffset(sdf.format(tomorrowTenAM.getTime()));
+	long tomorrowTenAMSeconds = tomorrowTenAM.getTimeInMillis()/1000;
+	estimateParams.setReadyTimestamp(tomorrowTenAMSeconds);
     /* End Optional ready_timestamp calculation
     /******************************************
         
@@ -290,11 +289,11 @@ The origin and destination contain information regarding the addresses in the or
     OrderCreateParameters orderCreateParams = new OrderCreateParameters();
         
     OrderCreateAddress originParams = new OrderCreateAddress();
-    originParams.setCompany_name("Gus's Fried Chicken");
-    originParams.setFirst_name("Napoleon");
-    originParams.setLast_name("Bonner");
-    originParams.setAddress_line_1("117 San Jacinto Blvd");
-    //originParams.setAddress_line_2("");
+    originParams.setCompanyName("Gus's Fried Chicken");
+    originParams.setFirstName("Napoleon");
+    originParams.setLastName("Bonner");
+    originParams.setAddressLine1("117 San Jacinto Blvd");
+    //originParams.setAddressLine2("");
     originParams.setCity("Austin");
     originParams.setState("TX");
     originParams.setZip("78701");
@@ -307,11 +306,11 @@ The origin and destination contain information regarding the addresses in the or
     orderCreateParams.setOrigin(originParams);
         
     OrderCreateAddress destinationParams = new OrderCreateAddress();
-    destinationParams.setCompany_name("Dropoff");
-    destinationParams.setFirst_name("Jason");
-    destinationParams.setLast_name("Kastner");
-    destinationParams.setAddress_line_1("901 S MoPac Expy");
-    destinationParams.setAddress_line_2("#150");
+    destinationParams.setCompanyName("Dropoff");
+    destinationParams.setFirstName("Jason");
+    destinationParams.setLastName("Kastner");
+    destinationParams.setAddressLine1("901 S MoPac Expy");
+    destinationParams.setAddressLine2("#150");
     destinationParams.setCity("Austin");
     destinationParams.setState("TX");
     destinationParams.setZip("78746");
@@ -342,13 +341,13 @@ The origin and destination contain information regarding the addresses in the or
 The details contain attributes about the order
 
     OrderCreateDetails details = new OrderCreateDetails();
-    details.setReady_date(diff);
+    details.setReadyDate(tomorrowTenAMSeconds);
     details.setType("two_hr");
     details.setQuantity(10);
     details.setWeight(20);
     // We are using the pricing for the two_hr time frame
     // for the estimate result we called earlier
-    details.setDistance(estimate.get("data").getAsJsonObject().get("Distance").getAsString());
+		details.setDistance(estimate.get("data").getAsJsonObject().get("Distance").getAsString());
     details.setEta(estimate.get("data").getAsJsonObject().get("ETA").getAsString());
     details.setPrice(estimate.get("data").getAsJsonObject().get("two_hr").getAsJsonObject().get("Price").getAsString());
         
@@ -370,7 +369,7 @@ Once this data is created, you can create the order.
     
 Note that if you want to create this order on behalf of a managed client as an enterprise client user you will need to specify the company_id.
 
-    orderCreateParams.setCompany_id("1111111111111");
+    orderCreateParams.setCompanyId("1111111111111");
     JsonObject createResponse = brawndo.order.create(orderCreateParams);
     
 The data in the callback will contain the id of the new order as well as the url where you can track the order progress.
@@ -381,15 +380,15 @@ The data in the callback will contain the id of the new order as well as the url
 ### Cancelling an order <a id="cancel"></a>
 
     OrderCancelParameters cancelParams = new OrderCancelParameters();
-    cancelParams.setOrder_id(created_order_id);
+    cancelParams.setOrderId(created_order_id);
     JsonObject cancelResponse = brawndo.order.cancel(cancelParams);
 
 	
 If you are trying to cancel an order for a manage client order as an enterprise client user, include the company_id in the argument parameters
 
     OrderCancelParameters cancelParams = new OrderCancelParameters();
-    cancelParams.setOrder_id(created_order_id);
-    cancelParams.setCompany_id("1111111111111");
+    cancelParams.setOrderId(created_order_id);
+    cancelParams.setCompanyId("1111111111111");
     JsonObject cancelResponse = brawndo.order.cancel(cancelParams);
     
 * **order_id** - the id of the order to cancel.
@@ -413,7 +412,7 @@ An example of a succesful cancel result is:
 ### Getting a specific order <a id="specific"></a>
 
     OrderGetParameters orderGetParams = new OrderGetParameters();
-    orderGetParams.setOrder_id("06ex-r3zV-BMb");
+    orderGetParams.setOrderId("06ex-r3zV-BMb");
 
 Example response
 
@@ -499,7 +498,7 @@ Get a page of orders after the last_key from a previous response
     String page1LastKey = page.get("last_key").getAsString();
 
     if (page.get("last_key") != null) {
-        nextPageParams.setLast_key(page.get("last_key").getAsString());
+        nextPageParams.setLastKey(page.get("last_key").getAsString());
     }
             
     JsonObject page = brawndo.order.get(nextPageParams);
@@ -509,17 +508,17 @@ Get the first page of orders as an enterprise client user for a managed client
 
 
     OrderGetParameters orderGetParams = new OrderGetParameters();
-    orderGetParams.setCompany_id("1111111111111");
+    orderGetParams.setCompanyId("1111111111111");
     JsonObject page = brawndo.order.get(orderGetParams);
     
 Get a page of orders after the last_key from a previous response as an enterprise client user for a managed client
 
     OrderGetParameters nextPageParams = new OrderGetParameters();
-    nextPageParams.setCompany_id("1111111111111");
+    nextPageParams.setCompanyId("1111111111111");
     String page1LastKey = page.get("last_key").getAsString();
 
     if (page.get("last_key") != null) {
-        nextPageParams.setLast_key(page.get("last_key").getAsString());
+        nextPageParams.setLastKey(page.get("last_key").getAsString());
     }
             
     JsonObject page = brawndo.order.get(nextPageParams);
@@ -544,7 +543,7 @@ You can create, delete, and read tips for individual orders.  Please note that t
 Tip creation requires two parameters, the order id **(order_id)** and the tip amount **(amount)**.
 
     TipParameters tipParams = new TipParameters();
-    tipParams.setOrder_id(created_order_id);
+    tipParams.setOrderId(created_order_id);
     tipParams.setAmount(4.44);            
     JsonObject tipResponse = brawndo.order.tip.create(tipParams);
 
@@ -553,14 +552,14 @@ Tip creation requires two parameters, the order id **(order_id)** and the tip am
 Tip deletion only requires the order id **(order_id)**.
 
     TipParameters tipParams = new TipParameters();
-    tipParams.setOrder_id(created_order_id);
+    tipParams.setOrderId(created_order_id);
     JsonObject tipResponse = brawndo.order.tip.delete(tipParams);
 
 If you are trying to delete a tip on a managed client order as an enterprise client user, include the company_id in the argument parameters
 
     TipParameters tipParams = new TipParameters();
-    tipParams.setOrder_id(created_order_id);
-    tipParams.setCompany_id("1111111111111");
+    tipParams.setOrderId(created_order_id);
+    tipParams.setCompanyId("1111111111111");
     JsonObject tipResponse = brawndo.order.tip.delete(tipParams);
 
 ### Reading a tip <a id="tip_read"></a>
@@ -568,14 +567,14 @@ If you are trying to delete a tip on a managed client order as an enterprise cli
 Tip reading only requires the order id **(order_id)**.
 
     TipParameters tipParams = new TipParameters();
-    tipParams.setOrder_id(created_order_id);
+    tipParams.setOrderId(created_order_id);
     JsonObject tipResponse = brawndo.order.tip.get(tipParams);
 
 If you are trying to read a tip on a manage client order as an enterprise client user, include the company_id in the argument parameters
 
     TipParameters tipParams = new TipParameters();
-    tipParams.setOrder_id(created_order_id);
-    tipParams.setCompany_id("1111111111111");
+    tipParams.setOrderId(created_order_id);
+    tipParams.setCompanyId("1111111111111");
     JsonObject tipResponse = brawndo.order.tip.get(tipParams);
 
 Example response:
