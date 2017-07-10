@@ -11,19 +11,19 @@ public class TipParameters {
     public TipParameters() {
     }
 
-    public String getOrder_id() {
+    public String getOrderId() {
         return order_id;
     }
 
-    public void setOrder_id(String order_id) {
+    public void setOrderId(String order_id) {
         this.order_id = order_id;
     }
 
-    public String getCompany_id() {
+    public String getCompanyId() {
         return company_id;
     }
 
-    public void setCompany_id(String company_id) {
+    public void setCompanyId(String company_id) {
         this.company_id = company_id;
     }
 

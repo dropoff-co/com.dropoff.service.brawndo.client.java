@@ -3,8 +3,6 @@ package com.dropoff.service.brawndo.client.java.api;
 import java.util.Map;
 import java.util.HashMap;
 
-import com.dropoff.service.brawndo.client.java.api.Client;
-
 import com.dropoff.service.brawndo.client.java.api.beans.TipParameters;
 import com.google.gson.JsonObject;
 
@@ -19,7 +17,7 @@ public class Tip {
     }
 
     public JsonObject create(TipParameters parameters) throws IllegalArgumentException {
-        if (parameters.getOrder_id() == null) {
+        if (parameters.getOrderId() == null) {
             throw new IllegalArgumentException("order_id should not be null");
         }
 
@@ -29,39 +27,39 @@ public class Tip {
 
         Map<String,String> query = new HashMap<String,String>();
 
-        if (parameters.getCompany_id() != null) {
-            query.put("company_id", parameters.getCompany_id());
+        if (parameters.getCompanyId() != null) {
+            query.put("company_id", parameters.getCompanyId());
         }
 
-        return client.doPost("/order/" + parameters.getOrder_id() + "/tip/" + parameters.getAmount(),
+        return client.doPost("/order/" + parameters.getOrderId() + "/tip/" + parameters.getAmount(),
                 "order", null, query);
     }
 
     public JsonObject get(TipParameters parameters) throws IllegalArgumentException {
-        if (parameters.getOrder_id() == null) {
+        if (parameters.getOrderId() == null) {
             throw new IllegalArgumentException("order_id should not be null");
         }
 
         Map<String,String> query = new HashMap<String,String>();
 
-        if (parameters.getCompany_id() != null) {
-            query.put("company_id", parameters.getCompany_id());
+        if (parameters.getCompanyId() != null) {
+            query.put("company_id", parameters.getCompanyId());
         }
 
-        return client.doGet("/order/" + parameters.getOrder_id() + "/tip", "order", query);
+        return client.doGet("/order/" + parameters.getOrderId() + "/tip", "order", query);
     }
 
     public JsonObject delete(TipParameters parameters) throws IllegalArgumentException {
-        if (parameters.getOrder_id() == null) {
+        if (parameters.getOrderId() == null) {
             throw new IllegalArgumentException("order_id should not be null");
         }
 
         Map<String,String> query = new HashMap<String,String>();
 
-        if (parameters.getCompany_id() != null) {
-            query.put("company_id", parameters.getCompany_id());
+        if (parameters.getCompanyId() != null) {
+            query.put("company_id", parameters.getCompanyId());
         }
 
-        return client.doDelete("/order/" + parameters.getOrder_id() + "/tip", "order", query);
+        return client.doDelete("/order/" + parameters.getOrderId() + "/tip", "order", query);
     }
 }

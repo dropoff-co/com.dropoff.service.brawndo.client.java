@@ -11,27 +11,27 @@ public class OrderCancelParameters {
     public OrderCancelParameters() {
     }
 
-    public String getOrder_id() {
+    public String getOrderId() {
         return order_id;
     }
 
-    public void setOrder_id(String order_id) {
+    public void setOrderId(String order_id) {
         this.order_id = order_id;
     }
 
-    public String getCompany_id() {
+    public String getCompanyId() {
         return company_id;
     }
 
-    public void setCompany_id(String company_id) {
+    public void setCompanyId(String company_id) {
         this.company_id = company_id;
     }
 
-    public String getLast_key() {
+    public String getLastKey() {
         return last_key;
     }
 
-    public void setLast_key(String last_key) {
+    public void setLastKey(String last_key) {
         this.last_key = last_key;
     }
 }

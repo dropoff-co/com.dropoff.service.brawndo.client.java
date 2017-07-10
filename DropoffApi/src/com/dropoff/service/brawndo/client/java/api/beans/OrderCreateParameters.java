@@ -12,12 +12,9 @@ public class OrderCreateParameters {
     public OrderCreateParameters() {
     }
 
-    public String getCompany_id() {
-        return company_id;
+    public String getCompanyId() { return company_id; }
 
-    }
-
-    public void setCompany_id(String company_id) {
+    public void setCompanyId(String company_id) {
         this.company_id = company_id;
     }
 

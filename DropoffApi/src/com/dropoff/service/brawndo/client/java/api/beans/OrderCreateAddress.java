@@ -21,43 +21,43 @@ public class OrderCreateAddress {
     public OrderCreateAddress() {
     }
 
-    public String getAddress_line_1() {
+    public String getAddressLine1() {
         return address_line_1;
     }
 
-    public void setAddress_line_1(String address_line_1) {
+    public void setAddressLine1(String address_line_1) {
         this.address_line_1 = address_line_1;
     }
 
-    public String getAddress_line_2() {
+    public String getAddressLine2() {
         return address_line_2;
     }
 
-    public void setAddress_line_2(String address_line_2) {
+    public void setAddressLine2(String address_line_2) {
         this.address_line_2 = address_line_2;
     }
 
-    public String getCompany_name() {
+    public String getCompanyName() {
         return company_name;
     }
 
-    public void setCompany_name(String company_name) {
+    public void setCompanyName(String company_name) {
         this.company_name = company_name;
     }
 
-    public String getFirst_name() {
+    public String getFirstName() {
         return first_name;
     }
 
-    public void setFirst_name(String first_name) {
+    public void setFirstName(String first_name) {
         this.first_name = first_name;
     }
 
-    public String getLast_name() {
+    public String getLastName() {
         return last_name;
     }
 
-    public void setLast_name(String last_name) {
+    public void setLastName(String last_name) {
         this.last_name = last_name;
     }
 
