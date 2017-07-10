@@ -6,7 +6,6 @@ import java.util.HashMap;
 import com.dropoff.service.brawndo.client.java.api.beans.*;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 /**
@@ -37,18 +36,18 @@ public class Order {
             query.put("destination", parameters.getDestination());
         }
 
-        if (parameters.getUtc_offset() == null) {
+        if (parameters.getUtcOffset() == null) {
             throw new IllegalArgumentException("utc_offset should not be null");
         } else {
-            query.put("utc_offset", parameters.getUtc_offset());
+            query.put("utc_offset", parameters.getUtcOffset());
         }
 
-        if (parameters.getReady_timestamp() > 0) {
-            query.put("ready_timestamp", Long.toString(parameters.getReady_timestamp()));
+        if (parameters.getReadyTimestamp() > 0) {
+            query.put("ready_timestamp", Long.toString(parameters.getReadyTimestamp()));
         }
 
-        if (parameters.getCompany_id() != null) {
-            query.put("company_id", parameters.getCompany_id());
+        if (parameters.getCompanyId() != null) {
+            query.put("company_id", parameters.getCompanyId());
         }
 
         return client.doGet("/estimate", "estimate", query);
@@ -57,42 +56,42 @@ public class Order {
     public JsonObject get(OrderGetParameters parameters) {
         Map<String,String> query = new HashMap<String,String>();
 
-        if (parameters.getCompany_id() != null) {
-            query.put("company_id", parameters.getCompany_id());
+        if (parameters.getCompanyId() != null) {
+            query.put("company_id", parameters.getCompanyId());
         }
 
-        if (parameters.getLast_key() != null) {
-            query.put("last_key", parameters.getLast_key());
+        if (parameters.getLastKey() != null) {
+            query.put("last_key", parameters.getLastKey());
         }
 
         String path = "/order";
 
-        if (parameters.getOrder_id() != null) {
-            path += "/" + parameters.getOrder_id();
+        if (parameters.getOrderId() != null) {
+            path += "/" + parameters.getOrderId();
         }
 
         return client.doGet(path, "order", query);
     }
 
     public JsonObject cancel(OrderCancelParameters parameters) throws IllegalArgumentException {
-        if (parameters.getOrder_id() == null) {
+        if (parameters.getOrderId() == null) {
             throw new IllegalArgumentException("order_id should not be null");
         }
 
         Map<String,String> query = new HashMap<String,String>();
 
-        if (parameters.getCompany_id() != null) {
-            query.put("company_id", parameters.getCompany_id());
+        if (parameters.getCompanyId() != null) {
+            query.put("company_id", parameters.getCompanyId());
         }
 
-        return client.doPost("/order/" + parameters.getOrder_id() + "/cancel", "order", null, query);
+        return client.doPost("/order/" + parameters.getOrderId() + "/cancel", "order", null, query);
     }
 
     public JsonObject create(OrderCreateParameters parameters) {
         Map<String,String> query = new HashMap<String,String>();
 
-        if(parameters.getCompany_id() != null) {
-            query.put("company_id", parameters.getCompany_id());
+        if(parameters.getCompanyId() != null) {
+            query.put("company_id", parameters.getCompanyId());
         }
 
         if(gson == null) {

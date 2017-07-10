@@ -14,6 +14,9 @@ public class OrderCreateDetails {
     public String reference_name;
     public String reference_code;
 
+    public OrderCreateDetails() {
+    }
+
     public int getQuantity() {
         return quantity;
     }
@@ -54,11 +57,11 @@ public class OrderCreateDetails {
         this.price = price;
     }
 
-    public long getReady_date() {
+    public long getReadyDate() {
         return ready_date;
     }
 
-    public void setReady_date(long ready_date) {
+    public void setReadyDate(long ready_date) {
         this.ready_date = ready_date;
     }
 
@@ -70,22 +73,19 @@ public class OrderCreateDetails {
         this.type = type;
     }
 
-    public String getReference_name() {
+    public String getReferenceName() {
         return reference_name;
     }
 
-    public void setReference_name(String reference_name) {
+    public void setReferenceName(String reference_name) {
         this.reference_name = reference_name;
     }
 
-    public String getReference_code() {
+    public String getReferenceCode() {
         return reference_code;
     }
 
-    public void setReference_code(String reference_code) {
+    public void setReferenceCode(String reference_code) {
         this.reference_code = reference_code;
-    }
-
-    public OrderCreateDetails() {
     }
 }

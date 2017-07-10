@@ -29,27 +29,27 @@ public class EstimateParameters {
         this.destination = destination;
     }
 
-    public String getUtc_offset() {
+    public String getUtcOffset() {
         return utc_offset;
     }
 
-    public void setUtc_offset(String utc_offset) {
+    public void setUtcOffset(String utc_offset) {
         this.utc_offset = utc_offset;
     }
 
-    public long getReady_timestamp() {
+    public long getReadyTimestamp() {
         return ready_timestamp;
     }
 
-    public void setReady_timestamp(long ready_timestamp) {
+    public void setReadyTimestamp(long ready_timestamp) {
         this.ready_timestamp = ready_timestamp;
     }
 
-    public String getCompany_id() {
+    public String getCompanyId() {
         return company_id;
     }
 
-    public void setCompany_id(String company_id) {
+    public void setCompanyId(String company_id) {
         this.company_id = company_id;
     }
 }
