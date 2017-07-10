@@ -50,7 +50,7 @@ public class DropoffApp {
         String page1LastKey = page.get("last_key").getAsString();
 
         if (page.get("last_key") != null) {
-            orderGetParams.setLast_key(page.get("last_key").getAsString());
+            orderGetParams.setLastKey(page.get("last_key").getAsString());
         }
 
         System.out.println("------------------------------");
@@ -73,7 +73,7 @@ public class DropoffApp {
         System.out.println("------------------------------");
         System.out.println("Getting order_id: " + order_id);
         orderGetParams = new OrderGetParameters();
-        orderGetParams.setOrder_id(order_id);
+        orderGetParams.setOrderId(order_id);
         JsonObject anOrder = brawndo.order.get(orderGetParams);
         System.out.println("++++++++++++++++++++++++++++++");
         System.out.println("++++++++++++++++++++++++++++++");
@@ -86,7 +86,7 @@ public class DropoffApp {
         estimateParams.setOrigin("117 San Jacinto Blvd, Austin, TX 78701");
         estimateParams.setDestination("901 S MoPac Expy, Austin, TX 78746");
         SimpleDateFormat sdf = new SimpleDateFormat("zzz");
-        estimateParams.setUtc_offset(sdf.format(new Date()));
+        estimateParams.setUtcOffset(sdf.format(new Date()));
         JsonObject estimate = null;
         try {
             estimate = brawndo.order.estimate(estimateParams);
@@ -107,12 +107,9 @@ public class DropoffApp {
         tomorrowTenAM.set(Calendar.SECOND, 0);
         tomorrowTenAM.add(Calendar.DATE, 1);
         tomorrowTenAM.add(Calendar.HOUR, 10);
-        estimateParams.setUtc_offset(sdf.format(tomorrowTenAM.getTime()));
-
-        Calendar origin = Calendar.getInstance();
-        origin.setTime(new Date(0));
-        long diff = (tomorrowTenAM.getTimeInMillis() - origin.getTimeInMillis())/1000;
-        estimateParams.setReady_timestamp(diff);
+        estimateParams.setUtcOffset(sdf.format(tomorrowTenAM.getTime()));
+        long tomorrowTenAMSeconds = tomorrowTenAM.getTimeInMillis()/1000;
+        estimateParams.setReadyTimestamp(tomorrowTenAMSeconds);
 
         try {
             estimate = brawndo.order.estimate(estimateParams);
@@ -129,10 +126,10 @@ public class DropoffApp {
         OrderCreateParameters orderCreateParams = new OrderCreateParameters();
         //orderCreateParams.setCompany_id("3e8e7d4a596ae41448d7e9c55a3a79bc");
         OrderCreateAddress originParams = new OrderCreateAddress();
-        originParams.setCompany_name("Gus's Fried Chicken");
-        originParams.setFirst_name("Napoleon");
-        originParams.setLast_name("Bonner");
-        originParams.setAddress_line_1("117 San Jacinto Blvd");
+        originParams.setCompanyName("Gus's Fried Chicken");
+        originParams.setFirstName("Napoleon");
+        originParams.setLastName("Bonner");
+        originParams.setAddressLine1("117 San Jacinto Blvd");
         //originParams.setAddress_line_2("");
         originParams.setCity("Austin");
         originParams.setState("TX");
@@ -145,11 +142,11 @@ public class DropoffApp {
         orderCreateParams.setOrigin(originParams);
 
         OrderCreateAddress destinationParams = new OrderCreateAddress();
-        destinationParams.setCompany_name("Dropoff");
-        destinationParams.setFirst_name("Jason");
-        destinationParams.setLast_name("Kastner");
-        destinationParams.setAddress_line_1("901 S MoPac Expy");
-        destinationParams.setAddress_line_2("#150");
+        destinationParams.setCompanyName("Dropoff");
+        destinationParams.setFirstName("Jason");
+        destinationParams.setLastName("Kastner");
+        destinationParams.setAddressLine1("901 S MoPac Expy");
+        destinationParams.setAddressLine2("#150");
         destinationParams.setCity("Austin");
         destinationParams.setState("TX");
         destinationParams.setZip("78746");
@@ -161,7 +158,7 @@ public class DropoffApp {
         orderCreateParams.setDestination(destinationParams);
 
         OrderCreateDetails details = new OrderCreateDetails();
-        details.setReady_date(diff);
+        details.setReadyDate(tomorrowTenAMSeconds);
         details.setType("two_hr");
         details.setQuantity(10);
         details.setWeight(20);
@@ -182,7 +179,7 @@ public class DropoffApp {
         System.out.println("------------------------------");
         System.out.println("Adding Tip");
         TipParameters tipParams = new TipParameters();
-        tipParams.setOrder_id(created_order_id);
+        tipParams.setOrderId(created_order_id);
         tipParams.setAmount(4.44);
 
         JsonObject tipResponse = brawndo.order.tip.create(tipParams);
@@ -210,7 +207,7 @@ public class DropoffApp {
         System.out.println("------------------------------");
         System.out.println("Cancelling Order");
         OrderCancelParameters cancelParams = new OrderCancelParameters();
-        cancelParams.setOrder_id(created_order_id);
+        cancelParams.setOrderId(created_order_id);
         JsonObject cancelResponse = brawndo.order.cancel(cancelParams);
         System.out.println("++++++++++++++++++++++++++++++");
         System.out.println("++++++++++++++++++++++++++++++");

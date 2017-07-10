@@ -40,7 +40,7 @@ object DropoffApp {
     System.out.println("++++++++++++++++++++++++++++++")
     System.out.println("OrderPage: " + page.toString)
     val page1LastKey = page.get("last_key").getAsString
-    if (page.get("last_key") != null) orderGetParams.setLast_key(page.get("last_key").getAsString)
+    if (page.get("last_key") != null) orderGetParams.setLastKey(page.get("last_key").getAsString)
     System.out.println("------------------------------")
     System.out.println("Getting Order Page 2")
     page = brawndo.order.get(orderGetParams)
@@ -57,7 +57,7 @@ object DropoffApp {
     System.out.println("------------------------------")
     System.out.println("Getting order_id: " + order_id)
     orderGetParams = new OrderGetParameters
-    orderGetParams.setOrder_id(order_id)
+    orderGetParams.setOrderId(order_id)
     val anOrder = brawndo.order.get(orderGetParams)
     System.out.println("++++++++++++++++++++++++++++++")
     System.out.println("++++++++++++++++++++++++++++++")
@@ -69,7 +69,7 @@ object DropoffApp {
     estimateParams.setOrigin("117 San Jacinto Blvd, Austin, TX 78701")
     estimateParams.setDestination("901 S MoPac Expy, Austin, TX 78746")
     val sdf = new SimpleDateFormat("zzz")
-    estimateParams.setUtc_offset(sdf.format(new Date))
+    estimateParams.setUtcOffset(sdf.format(new Date))
     var estimate = null
     try {
       estimate = brawndo.order.estimate(estimateParams)
@@ -90,11 +90,11 @@ object DropoffApp {
     tomorrowTenAM.set(Calendar.SECOND, 0)
     tomorrowTenAM.add(Calendar.DATE, 1)
     tomorrowTenAM.add(Calendar.HOUR, 10)
-    estimateParams.setUtc_offset(sdf.format(tomorrowTenAM.getTime))
+    estimateParams.setUtcOffset(sdf.format(tomorrowTenAM.getTime))
     val origin = Calendar.getInstance
     origin.setTime(new Date(0))
     val diff = (tomorrowTenAM.getTimeInMillis - origin.getTimeInMillis) / 1000
-    estimateParams.setReady_timestamp(diff)
+    estimateParams.setReadyTimestamp(diff)
     try {
       estimate = brawndo.order.estimate(estimateParams)
       System.out.println("++++++++++++++++++++++++++++++")
@@ -110,10 +110,10 @@ object DropoffApp {
     val orderCreateParams = new OrderCreateParameters
     //orderCreateParams.setCompany_id("3e8e7d4a596ae41448d7e9c55a3a79bc");
     val originParams = new OrderCreateAddress
-    originParams.setCompany_name("Gus's Fried Chicken")
-    originParams.setFirst_name("Napoleon")
-    originParams.setLast_name("Bonner")
-    originParams.setAddress_line_1("117 San Jacinto Blvd")
+    originParams.setCompanyName("Gus's Fried Chicken")
+    originParams.setFirstName("Napoleon")
+    originParams.setLastName("Bonner")
+    originParams.setAddressLine1("117 San Jacinto Blvd")
     //originParams.setAddress_line_2("");
     originParams.setCity("Austin")
     originParams.setState("TX")
@@ -125,11 +125,11 @@ object DropoffApp {
     originParams.setRemarks("Origin Remarks")
     orderCreateParams.setOrigin(originParams)
     val destinationParams = new OrderCreateAddress
-    destinationParams.setCompany_name("Dropoff")
-    destinationParams.setFirst_name("Jason")
-    destinationParams.setLast_name("Kastner")
-    destinationParams.setAddress_line_1("901 S MoPac Expy")
-    destinationParams.setAddress_line_2("#150")
+    destinationParams.setCompanyName("Dropoff")
+    destinationParams.setFirstName("Jason")
+    destinationParams.setLastName("Kastner")
+    destinationParams.setAddressLine1("901 S MoPac Expy")
+    destinationParams.setAddressLine2("#150")
     destinationParams.setCity("Austin")
     destinationParams.setState("TX")
     destinationParams.setZip("78746")
@@ -140,7 +140,7 @@ object DropoffApp {
     destinationParams.setRemarks("Please use the front entrance. The back on is guarded by cats!")
     orderCreateParams.setDestination(destinationParams)
     val details = new OrderCreateDetails
-    details.setReady_date(diff)
+    details.setReadyDate(diff)
     details.setType("two_hr")
     details.setQuantity(10)
     details.setWeight(20)
@@ -159,7 +159,7 @@ object DropoffApp {
     System.out.println("------------------------------")
     System.out.println("Adding Tip")
     val tipParams = new TipParameters
-    tipParams.setOrder_id(created_order_id)
+    tipParams.setOrderId(created_order_id)
     tipParams.setAmount(4.44)
     var tipResponse = brawndo.order.tip.create(tipParams)
     System.out.println("++++++++++++++++++++++++++++++")
@@ -183,7 +183,7 @@ object DropoffApp {
     System.out.println("------------------------------")
     System.out.println("Cancelling Order")
     val cancelParams = new OrderCancelParameters
-    cancelParams.setOrder_id(created_order_id)
+    cancelParams.setOrderId(created_order_id)
     val cancelResponse = brawndo.order.cancel(cancelParams)
     System.out.println("++++++++++++++++++++++++++++++")
     System.out.println("++++++++++++++++++++++++++++++")
