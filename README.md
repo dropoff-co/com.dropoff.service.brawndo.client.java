@@ -30,6 +30,7 @@ This is the 3rd party dropoff Java client for creating and viewing orders.
     - [Managed Client Events](#managed_client_events)
   + [Order Simulation](#simulation)
   + [Client Shutdown](#shutdown)
+  + [Java Version](#version)
 
 ## Using the client <a id="client"></a>
 
@@ -704,7 +705,7 @@ So in our hierarchical [example](#managed_clients) at the start, if a webhook wa
 - EnterpriseCo Los Angeles
 
 
-### Simulating an order<a id="simulation"></a>
+## Simulating an order<a id="simulation"></a>
 
 You can simulate an order via the brawndo api in order to test your webhooks.
 
@@ -714,9 +715,13 @@ The simulation will create an order, assign it to a simulation agent, and move t
 
     brawndo.order.simulate("austin");
 
-### Shutting down the client<a id="shutdown"></a>
+## Shutting down the client<a id="shutdown"></a>
 
 When you are done using the client, a shutdown is required to stop the executor
 from holding on to resources
 
     brawndo.shutdown();
+    
+## Java Version <a id="version"></a>
+
+DropoffApi-v1-0-1.jar compiled using JDK 1.6.0_65. Jar tested against application (/ScalaTest/DropoffApp.scala) using Scala 2.11.11
