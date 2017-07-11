@@ -18,7 +18,7 @@ public class DropoffApp {
         System.out.println("HelloWorld!");
         ApiV1 brawndo = new ApiV1();
         //String url = "http://localhost:9094/v1";
-        String url = "https://sandbow-brawndo.dropoff.com/v1";
+        String url = "https://sandbox-brawndo.dropoff.com/v1";
         //String host = "localhost:9094";
         String host = "sandbox-brawndo.dropoff.com";
         String private_key = "";
