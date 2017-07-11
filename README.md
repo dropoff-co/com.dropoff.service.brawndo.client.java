@@ -9,6 +9,7 @@ This is the 3rd party dropoff Java client for creating and viewing orders.
 * **For GO documentation go [HERE](https://github.com/dropoff-co/com.dropoff.service.brawndo.client/blob/master/go_README.md "GO")**
 * **For Ruby documentation go [HERE](https://github.com/dropoff-co/com.dropoff.service.brawndo.client/blob/master/ruby_README.md "Ruby")**
 * **For .NET documentation go [HERE](https://github.com/dropoff-co/com.dropoff.service.brawndo.client.dotnetcore/blob/master/README.md ".NET")**
+* **For Python documentation go [HERE](https://github.com/dropoff-co/com.dropoff.service.brawndo.client.python/blob/master/README.md "Python")**
 
 # Table of Contents
   + [Client Info](#client)
@@ -48,7 +49,7 @@ Instantiate an instance of ApiV1 in order to start making calls to brawndo.
 
 You will then have to configure the brawndo instance with the configure function.
 
-    String url = "https://sandbow-brawndo.dropoff.com/v1";
+    String url = "https://sandbox-brawndo.dropoff.com/v1";
     String host = "sandbox-brawndo.dropoff.com";
     String private_key = "fcb60b8680d7b5c67921a852b39067a19d85318ce8abf4c512";
     String public_key = "ced2eaf24f1eaf832c1ea92b41386b4a5982cfcdb69b7c7818";
@@ -205,8 +206,8 @@ Before you place an order you will first want to estimate the distance, eta, and
     SimpleDateFormat sdf = new SimpleDateFormat("zzz");
     estimateParams.setUtcOffset(sdf.format(new Date()));
         
-    /******************************************
-    /* Optional ready_timestamp calculation
+    /******************************************/
+    /* Optional ready_timestamp calculation */
 	Calendar tomorrowTenAM = Calendar.getInstance();
 	tomorrowTenAM.setTime(new Date());
 	tomorrowTenAM.set(Calendar.HOUR_OF_DAY, 0);
@@ -217,8 +218,8 @@ Before you place an order you will first want to estimate the distance, eta, and
 	estimateParams.setUtcOffset(sdf.format(tomorrowTenAM.getTime()));
 	long tomorrowTenAMSeconds = tomorrowTenAM.getTimeInMillis()/1000;
 	estimateParams.setReadyTimestamp(tomorrowTenAMSeconds);
-    /* End Optional ready_timestamp calculation
-    /******************************************
+    /* End Optional ready_timestamp calculation */
+    /******************************************/
         
     JsonObject estimate = null;
     try {
@@ -347,8 +348,7 @@ The details contain attributes about the order
     details.setQuantity(10);
     details.setWeight(20);
     // We are using the pricing for the two_hr time frame
-    // for the estimate result we called earlier
-		details.setDistance(estimate.get("data").getAsJsonObject().get("Distance").getAsString());
+	// for the estimate result we called 	earlierdetails.setDistance(estimate.get("data").getAsJsonObject().get("Distance").getAsString());
     details.setEta(estimate.get("data").getAsJsonObject().get("ETA").getAsString());
     details.setPrice(estimate.get("data").getAsJsonObject().get("two_hr").getAsJsonObject().get("Price").getAsString());
         
@@ -724,4 +724,4 @@ from holding on to resources
     
 ## Java Version <a id="version"></a>
 
-DropoffApi-v1-0-1.jar compiled using JDK 1.6.0_65. Jar tested against application (/ScalaTest/DropoffApp.scala) using Scala 2.11.11
+DropoffApi-v1-0.jar compiled using JDK 1.6.0_65. Jar tested against application (/ScalaTest/DropoffApp.scala) using Scala 2.11.11
