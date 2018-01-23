@@ -54,7 +54,6 @@ public class DropoffApp {
 
         OrderGetParameters signatureGetParams = new OrderGetParameters();
         signatureGetParams.setOrderId("01de44f7a46be2d6cda526dda87742a0");
-        signatureGetParams.setCompanyId();
         System.out.println("------------------------------");
         System.out.println("Getting Order Signature");
         JsonObject signature = brawndo.order.getSignature(signatureGetParams);
