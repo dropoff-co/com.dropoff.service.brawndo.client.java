@@ -623,7 +623,6 @@ Some orders will contain signatures.  If you want to get a url to an image of th
 
     OrderGetParameters signatureGetParams = new OrderGetParameters();
     signatureGetParams.setOrderId("Rr0W-e1OL-Lr0");
-    signatureGetParams.setCompanyId(companyId); //optional
     JsonObject signature = brawndo.order.getSignature(signatureGetParams);
 
 Example Response
