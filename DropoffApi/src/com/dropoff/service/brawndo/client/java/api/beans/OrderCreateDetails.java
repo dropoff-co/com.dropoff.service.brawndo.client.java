@@ -13,6 +13,7 @@ public class OrderCreateDetails {
     public String type;
     public String reference_name;
     public String reference_code;
+    public int[] properties;
 
     public OrderCreateDetails() {
     }

@@ -8,6 +8,7 @@ public class OrderCreateParameters {
     public OrderCreateAddress origin;
     public OrderCreateAddress destination;
     public OrderCreateDetails details;
+    public int[] properties;
 
     public OrderCreateParameters() {
     }
@@ -41,4 +42,8 @@ public class OrderCreateParameters {
     public void setDetails(OrderCreateDetails details) {
         this.details = details;
     }
+
+    public int[] getProperties() { return properties; }
+
+    public void setProperties(int[] properties) { this.properties = properties; }
 }

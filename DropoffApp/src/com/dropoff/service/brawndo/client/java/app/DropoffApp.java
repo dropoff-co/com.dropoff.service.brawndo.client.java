@@ -17,12 +17,12 @@ public class DropoffApp {
     public static void main(String[] args) {
         System.out.println("HelloWorld!");
         ApiV1 brawndo = new ApiV1();
-        //String url = "http://localhost:9094/v1";
-        String url = "https://sandbox-brawndo.dropoff.com/v1";
-        //String host = "localhost:9094";
-        String host = "sandbox-brawndo.dropoff.com";
-        String private_key = "";
-        String public_key = "";
+        String url = "http://localhost:9094/v1";
+//        String url = "https://sandbox-brawndo.dropoff.com/v1";
+        String host = "localhost:9094";
+//        String host = "sandbox-brawndo.dropoff.com";
+        String private_key = "74ac377c478a9fbd05203b3125db3f6402ead2d2ce1b9fa936c04fce43d8c168";
+        String public_key = "11981f9d4c223a598fd2a550568064a259c08c367ce6d46cde2a47026b5e4bcb";
 
         brawndo.initialize(url, host, private_key, public_key);
         System.out.println("------------------------------");
@@ -36,6 +36,37 @@ public class DropoffApp {
         } else {
             System.out.println("Info: NULL");
         }
+
+        AvailablePropertiesParameters propsGetParams = new AvailablePropertiesParameters();
+        String companyId = info.getAsJsonObject("data").getAsJsonObject("client").get("id").getAsString();
+        //propsGetParams.setCompanyId(companyId);
+        System.out.println("------------------------------");
+        System.out.println("Getting Company Properties");
+        JsonObject props = brawndo.order.availableProperties(propsGetParams);
+        System.out.println("++++++++++++++++++++++++++++++");
+        System.out.println("++++++++++++++++++++++++++++++");
+        System.out.println("++++++++++++++++++++++++++++++");
+        if (props != null) {
+            System.out.println("Properties: " + props.toString());
+        } else {
+            System.out.println("Properties: NULL");
+        }
+
+        OrderGetParameters signatureGetParams = new OrderGetParameters();
+        signatureGetParams.setOrderId("01de44f7a46be2d6cda526dda87742a0");
+        signatureGetParams.setCompanyId();
+        System.out.println("------------------------------");
+        System.out.println("Getting Order Signature");
+        JsonObject signature = brawndo.order.getSignature(signatureGetParams);
+        System.out.println("++++++++++++++++++++++++++++++");
+        System.out.println("++++++++++++++++++++++++++++++");
+        System.out.println("++++++++++++++++++++++++++++++");
+        if (signature != null) {
+            System.out.println("Signature: " + signature.toString());
+        } else {
+            System.out.println("Signature: NULL");
+        }
+
 
         OrderGetParameters orderGetParams = new OrderGetParameters();
 
@@ -124,13 +155,16 @@ public class DropoffApp {
         System.out.println("------------------------------");
         System.out.println("Creating Order");
         OrderCreateParameters orderCreateParams = new OrderCreateParameters();
-        //orderCreateParams.setCompany_id("3e8e7d4a596ae41448d7e9c55a3a79bc");
+        orderCreateParams.setCompanyId(companyId);
+        int[] createOrderProps = {2,4};
+        orderCreateParams.setProperties(createOrderProps);
+
         OrderCreateAddress originParams = new OrderCreateAddress();
         originParams.setCompanyName("Gus's Fried Chicken");
         originParams.setFirstName("Napoleon");
         originParams.setLastName("Bonner");
         originParams.setAddressLine1("117 San Jacinto Blvd");
-        //originParams.setAddress_line_2("");
+        //originParams.setAddressLine2("");
         originParams.setCity("Austin");
         originParams.setState("TX");
         originParams.setZip("78701");
@@ -164,7 +198,7 @@ public class DropoffApp {
         details.setWeight(20);
         details.setDistance(estimate.get("data").getAsJsonObject().get("Distance").getAsString());
         details.setEta(estimate.get("data").getAsJsonObject().get("ETA").getAsString());
-        details.setPrice(estimate.get("data").getAsJsonObject().get("two_hr").getAsJsonObject().get("Price").getAsString());
+        details.setPrice(estimate.get("data").getAsJsonObject().get("two_hr").getAsJsonObject(). get("Price").getAsString());
         //details.setReference_code("");
         //details.setReference_name("");
         orderCreateParams.setDetails(details);
