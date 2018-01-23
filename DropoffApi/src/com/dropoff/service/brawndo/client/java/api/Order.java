@@ -73,6 +73,24 @@ public class Order {
         return client.doGet(path, "order", query);
     }
 
+    public JsonObject getSignature(OrderGetParameters parameters) throws IllegalArgumentException {
+        Map<String,String> query = new HashMap<String,String>();
+
+        if (parameters.getCompanyId() != null) {
+            query.put("company_id", parameters.getCompanyId());
+        }
+
+        String path = "/order/signature";
+
+        if (parameters.getOrderId() != null) {
+            path += "/" + parameters.getOrderId();
+        } else {
+            throw new IllegalArgumentException("order_id should not be null");
+        }
+
+        return client.doGet(path, "order", query);
+    }
+
     public JsonObject cancel(OrderCancelParameters parameters) throws IllegalArgumentException {
         if (parameters.getOrderId() == null) {
             throw new IllegalArgumentException("order_id should not be null");
@@ -101,6 +119,16 @@ public class Order {
         System.out.println("Payload: "+payload);
 
         return client.doPost("/order", "order", payload, query);
+    }
+
+    public JsonObject availableProperties(AvailablePropertiesParameters parameters) {
+        Map<String, String> query = new HashMap<String, String>();
+
+        if(parameters.getCompanyId() != null) {
+            query.put("company_id", parameters.getCompanyId());
+        }
+
+        return client.doGet("/order/properties", "order", query);
     }
 
     public JsonObject simulate(String market) throws IllegalArgumentException {
