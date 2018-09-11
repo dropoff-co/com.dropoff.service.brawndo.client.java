@@ -131,11 +131,25 @@ public class Order {
         return client.doGet("/order/properties", "order", query);
     }
 
-    public JsonObject simulate(String market) throws IllegalArgumentException {
-        if (market == null) {
+    public JsonObject simulate(SimulateParameters parameters) throws IllegalArgumentException {
+        if (parameters.getMarket() == null && parameters.getOrderId() == null) {
             throw new IllegalArgumentException("market should not be null");
         }
 
-        return client.doGet("/order/simulate/" + market, "order", null);
+        Map<String,String> query = new HashMap<String,String>();
+
+        if(parameters.getCompanyId() != null) {
+            query.put("company_id", parameters.getCompanyId());
+        }
+
+        String path = null;
+
+        if (parameters.getMarket() != null) {
+            path = "/order/simulate/" + parameters.getMarket();
+        } else if (parameters.getOrderId() != null) {
+            path = "/order/simulate/order/" + parameters.getOrderId();
+        }
+
+        return client.doGet(path, "order", query);
     }
 }
