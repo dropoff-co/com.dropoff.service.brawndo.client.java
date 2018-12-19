@@ -8,7 +8,17 @@ public class OrderCreateParameters {
     public OrderCreateAddress origin;
     public OrderCreateAddress destination;
     public OrderCreateDetails details;
+    public OrderLineItems[] items;
     public int[] properties;
+
+    public OrderLineItems[] getItems() {
+        return items;
+    }
+
+    public void setItems(OrderLineItems[] lineItems) {
+        this.items = lineItems;
+    }
+
 
     public OrderCreateParameters() {
     }
