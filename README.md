@@ -260,6 +260,11 @@ An example of a successful response will look like this:
 ### Getting Available Order Items <a id="order_items"></a>
 An order can be created with order line items such as quantity, or temperature. To use a line item, the line item must be enabled for your account. To see which order line items are available for your account, use the **Available Items** function. 
 
+	//companyId is optional
+	GetAvailableItemsParameters getAvailableItemsParameters = new GetAvailableItemsParameters();
+    getAvailableItemsParameters.setCompanyId(companyId);
+    JsonObject availableItems = brawndo.order.availableItems(getAvailableItemsParameters);
+    System.out.println(availableItems.toString());
 
 An example of a successful response will look like this:
 
@@ -471,9 +476,7 @@ This is an optional piece of data.
 
 The order items section is an array of [items](#order_items) to add to the order. This is an optional piece of data.
 
-Create as many items as you need.
-
-    OrderLineItems lineItems = new OrderLineItems();
+    OrderLineItems lineItem1 = new OrderLineItems();
     lineItems.setContainer("Box");
     lineItems.setDescription("Please be descriptive about your description");
     lineItems.setWidth("50");
