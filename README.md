@@ -258,7 +258,7 @@ An example of a successful response will look like this:
 
 
 ### Getting Available Order Items <a id="order_items"></a>
-An order can be created with order line items such as quantity or temperature. To use a line item, the line item must be enabled for your account. To see which order line items are available for your account, use the **Available Items** function. 
+An order can be created with order line items such as quantity, or temperature. To use a line item, the line item must be enabled for your account. To see which order line items are available for your account, use the **Available Items** function. 
 
 
 An example of a successful response will look like this:
@@ -467,20 +467,6 @@ The properties section is an array of [property ids](#order_properties) to add t
 
 This is an optional piece of data.
 
-Once this data is created, you can create the order.
-
-    JsonObject createResponse = brawndo.order.create(orderCreateParams);
-    
-Note that if you want to create this order on behalf of a managed client as an enterprise client user you will need to specify the company_id.
-
-    orderCreateParams.setCompanyId("1111111111111");
-    JsonObject createResponse = brawndo.order.create(orderCreateParams);
-    
-The data in the callback will contain the id of the new order as well as the url where you can track the order progress.
-    
-    String created_order_id = createResponse.get("data").getAsJsonObject().get("order_id").getAsString();
-    String created_order_url = createResponse.get("data").getAsJsonObject().get("url").getAsString();
-
 #### Order Items data.
 
 The order items section is an array of [items](#order_items) to add to the order. This is an optional piece of data.
@@ -505,6 +491,20 @@ Add all order items to an array. Add the array to OrderCreateParams
 
     OrderLineItems[] allItems = new OrderLineItems[] {lineItem1};
     orderCreateParams.setItems(allItems);
+
+Once this data is created, you can create the order.
+
+    JsonObject createResponse = brawndo.order.create(orderCreateParams);
+    
+Note that if you want to create this order on behalf of a managed client as an enterprise client user you will need to specify the company_id.
+
+    orderCreateParams.setCompanyId("1111111111111");
+    JsonObject createResponse = brawndo.order.create(orderCreateParams);
+    
+The data in the callback will contain the id of the new order as well as the url where you can track the order progress.
+    
+    String created_order_id = createResponse.get("data").getAsJsonObject().get("order_id").getAsString();
+    String created_order_url = createResponse.get("data").getAsJsonObject().get("url").getAsString();
     
 
 ### Cancelling an order <a id="cancel"></a>
