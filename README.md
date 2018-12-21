@@ -612,20 +612,40 @@ Example response
                  market: 'austin',
                  remarks: 'Be nice to napoleon'
              },
-                          properties : [
-             		{
-      					"id": 2,
-      					"label": "Signature Required",
-      					"description": "Signature is required for this order.",
-			      		"price_adjustment": 0
-    				},
-    				{
-      					"id": 3,
-      					"label": "Legal Filing",
-      					"description": "This order is a legal filing at the court house. Please read order remarks carefully.",
-			      		"price_adjustment": 5.50
-    				}
-             ]
+             properties : [
+					{
+						"id": 2,
+						"label": "Signature Required",
+						"description": "Signature is required for this order.",
+						"price_adjustment": 0
+					},
+					{
+						"id": 3,
+						"label": "Legal Filing",
+						"description": "This order is a legal filing at the court house. Please read order remarks carefully.",
+						"price_adjustment": 5.50
+					}
+				],
+             items: [
+				  {
+				    "container": 200,
+				    "quantity": 2,
+				    "weight": 5,
+				    "description": "this order is very important",
+				    "createdate": 1545410919,
+				    "person_name": "John McJohn",
+				    "order_item_id": "46b30a26358dfd799ae764c90850ccfc",
+				    "unit": "ft",
+				    "depth": 5,
+				    "updatedate": 1545410919,
+				    "price": 10.55,
+				    "temperature": 0,
+				    "width": 4,
+				    "sku": "123456123456",
+				    "order_id": "7826566d9d16095e79c019c389c667b6",
+				    "height": 4
+				  }
+    		],
         },
         success: true,
         timestamp: '2015-03-09T18:42:15+00:00'
