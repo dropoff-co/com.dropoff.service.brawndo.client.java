@@ -16,6 +16,29 @@ public class Order {
     private Gson gson = null;
     public Tip tip;
 
+    //line item constants
+    public static int LINE_ITEM_DISABLED = 0;
+    public static int LINE_ITEM_OPTIONAL = 1;
+    public static int LINE_ITEM_REQUIRED = 2;
+
+    public static int TEMP_NA = 0;
+    public static int TEMP_AMBIENT = 100;
+    public static int TEMP_REFRIGERATED = 200;
+    public static int TEMP_FROZEN = 300;
+
+    public static int CONTAINER_NA = 0;
+    public static int CONTAINER_BAG = 100;
+    public static int CONTAINER_BOX = 200;
+    public static int CONTAINER_TRAY = 300;
+    public static int CONTAINER_PALLET = 400;
+    public static int CONTAINER_BARREL = 500;
+    public static int CONTAINER_BASKET = 600;
+    public static int CONTAINER_BUCKET = 700;
+    public static int CONTAINER_CARTON = 800;
+    public static int CONTAINER_CASE = 900;
+    public static int CONTAINER_COOLER = 1000;
+    public static int CONTAINER_CRATE = 1100;
+
     public Order(Client client) {
         this.client = client;
         tip = new Tip(client);

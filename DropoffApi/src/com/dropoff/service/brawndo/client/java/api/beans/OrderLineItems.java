@@ -2,7 +2,7 @@ package com.dropoff.service.brawndo.client.java.api.beans;
 
 public class OrderLineItems {
 
-    private String container;
+    private int container;
     private String description;
     private String width;
     private String height;
@@ -11,15 +11,15 @@ public class OrderLineItems {
     private String price;
     private int quantity;
     private String sku;
-    private String temperature;
+    private int temperature;
     private String weight;
     private String unit;
 
-    public String getContainer() {
+    public int getContainer() {
         return container;
     }
 
-    public void setContainer(String container) {
+    public void setContainer(int container) {
         this.container = container;
     }
 
@@ -87,11 +87,11 @@ public class OrderLineItems {
         this.sku = sku;
     }
 
-    public String getTemperature() {
+    public int getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(String temperature) {
+    public void setTemperature(int temperature) {
         this.temperature = temperature;
     }
 

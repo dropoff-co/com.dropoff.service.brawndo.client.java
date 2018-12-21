@@ -258,7 +258,7 @@ An example of a successful response will look like this:
 
 
 ### Getting Available Order Items <a id="order_items"></a>
-An order can be created with order line items such as quantity, or temperature. To use a line item, the line item must be enabled for your account. To see which order line items are available for your account, use the **Available Items** function. 
+An order can be created with order line items such as quantity, or temperature. To use a line item, the line item must be enabled for your account. To see which order line items are available for your account, use the **Available Items** function. Order line item constants are in Order.java.
 
 	//companyId is optional
 	GetAvailableItemsParameters getAvailableItemsParameters = new GetAvailableItemsParameters();
@@ -477,7 +477,7 @@ This is an optional piece of data.
 The order items section is an array of [items](#order_items) to add to the order. This is an optional piece of data.
 
     OrderLineItems lineItem1 = new OrderLineItems();
-    lineItems.setContainer("Box");
+    lineItems.setContainer(Order.CONTAINER_BOX);
     lineItems.setDescription("Please be descriptive about your description");
     lineItems.setWidth("50");
     lineItems.setHeight("10");
@@ -486,7 +486,7 @@ The order items section is an array of [items](#order_items) to add to the order
     lineItems.setPrice("10000");
     lineItems.setQuantity(2);
     lineItems.setSku("4343434343");
-    lineItems.setTemperature("AMBIENT");
+    lineItems.setTemperature(Order.TEMP_REFRIGERATED);
     lineItems.setWeight("12");
     lineItems.setUnit("ft");
     

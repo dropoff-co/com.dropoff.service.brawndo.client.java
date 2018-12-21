@@ -1,5 +1,6 @@
 package com.dropoff.service.brawndo.client.java.app;
 
+import com.dropoff.service.brawndo.client.java.api.Order;
 import com.dropoff.service.brawndo.client.java.api.beans.*;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -214,7 +215,7 @@ public class DropoffApp {
         orderCreateParams.setDetails(details);
 
         OrderLineItems lineItems = new OrderLineItems();
-        lineItems.setContainer("Box");
+        lineItems.setContainer(Order.CONTAINER_BAG);
         lineItems.setDescription("Please be descriptive about your description");
         lineItems.setWidth("50");
         lineItems.setHeight("10");
@@ -223,7 +224,7 @@ public class DropoffApp {
         lineItems.setPrice("10000");
         lineItems.setQuantity(2);
         lineItems.setSku("4343434343");
-        lineItems.setTemperature("AMBIENT");
+        lineItems.setTemperature(Order.TEMP_AMBIENT);
         lineItems.setWeight("12");
         lineItems.setUnit("ft");
         orderCreateParams.setItems(new OrderLineItems[] {lineItems});
