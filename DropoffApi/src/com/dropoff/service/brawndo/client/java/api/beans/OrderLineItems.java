@@ -14,6 +14,16 @@ public class OrderLineItems {
     private int temperature;
     private String weight;
     private String unit;
+    private OrderLineItems[] nested_items;
+
+    public OrderLineItems[] getNestedItems() {
+        return nested_items;
+    }
+
+    public void setNestedItems(OrderLineItems[] nestedItems) {
+        this.nested_items = nestedItems;
+    }
+
 
     public int getContainer() {
         return container;

@@ -227,6 +227,17 @@ public class DropoffApp {
         lineItems.setTemperature(Order.TEMP_AMBIENT);
         lineItems.setWeight("12");
         lineItems.setUnit("ft");
+
+        //Make a nested order line item
+            OrderLineItems lineItemNested = new OrderLineItems();
+            lineItemNested.setDescription("Inner object");
+            lineItemNested.setWidth("5");
+            lineItemNested.setHeight("12");
+            lineItemNested.setDepth("1");
+            lineItemNested.setPerson_name("Johnny Is");
+            lineItemNested.setPrice("10000");
+
+            lineItems.setNestedItems(new OrderLineItems[] {lineItemNested});
         orderCreateParams.setItems(new OrderLineItems[] {lineItems});
 
 
