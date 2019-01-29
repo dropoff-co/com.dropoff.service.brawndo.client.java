@@ -1,5 +1,6 @@
 package com.dropoff.service.brawndo.client.java.app;
 
+import com.dropoff.service.brawndo.client.java.api.Order;
 import com.dropoff.service.brawndo.client.java.api.beans.*;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -21,8 +22,8 @@ public class DropoffApp {
 //        String url = "https://sandbox-brawndo.dropoff.com/v1";
         String host = "localhost:9094";
 //        String host = "sandbox-brawndo.dropoff.com";
-        String private_key = "74ac377c478a9fbd05203b3125db3f6402ead2d2ce1b9fa936c04fce43d8c168";
-        String public_key = "11981f9d4c223a598fd2a550568064a259c08c367ce6d46cde2a47026b5e4bcb";
+        String private_key = "78ca06d0601c23751a642eed60acf69c65206ab825bbd10f81dde5fb370fac28";
+        String public_key = "771f764454130af2c086e243e316feffe06d7f0aace18ad4ab16e47608efb625";
 
         brawndo.initialize(url, host, private_key, public_key);
         System.out.println("------------------------------");
@@ -111,6 +112,16 @@ public class DropoffApp {
         System.out.println("An order: " + anOrder.toString());
 
         System.out.println("------------------------------");
+        System.out.println("Getting available order items");
+        GetAvailableItemsParameters getAvailableItemsParameters = new GetAvailableItemsParameters();
+        getAvailableItemsParameters.setCompanyId(companyId);
+        JsonObject availableItems = brawndo.order.availableItems(getAvailableItemsParameters);
+        System.out.println("++++++++++++++++++++++++++++++");
+        System.out.println("++++++++++++++++++++++++++++++");
+        System.out.println("++++++++++++++++++++++++++++++");
+        System.out.println("Available items: " + availableItems.toString());
+
+        System.out.println("------------------------------");
         System.out.println("Getting Order Estimate");
         EstimateParameters estimateParams = new EstimateParameters();
         estimateParams.setOrigin("117 San Jacinto Blvd, Austin, TX 78701");
@@ -151,10 +162,11 @@ public class DropoffApp {
             iae.printStackTrace();
         }
 
+
         System.out.println("------------------------------");
         System.out.println("Creating Order");
         OrderCreateParameters orderCreateParams = new OrderCreateParameters();
-        orderCreateParams.setCompanyId(companyId);
+        orderCreateParams.setCompanyId("7df2b0bdb418157609c0d5766fb7fb12");
         int[] createOrderProps = {2,4};
         orderCreateParams.setProperties(createOrderProps);
 
@@ -195,12 +207,28 @@ public class DropoffApp {
         details.setType("two_hr");
         details.setQuantity(10);
         details.setWeight(20);
-        details.setDistance(estimate.get("data").getAsJsonObject().get("Distance").getAsString());
-        details.setEta(estimate.get("data").getAsJsonObject().get("ETA").getAsString());
-        details.setPrice(estimate.get("data").getAsJsonObject().get("two_hr").getAsJsonObject(). get("Price").getAsString());
+        details.setDistance("5");
+        details.setEta("15");
+        details.setPrice("10");
         //details.setReference_code("");
         //details.setReference_name("");
         orderCreateParams.setDetails(details);
+
+        OrderLineItems lineItems = new OrderLineItems();
+        lineItems.setContainer(Order.CONTAINER_BAG);
+        lineItems.setDescription("Please be descriptive about your description");
+        lineItems.setWidth("50");
+        lineItems.setHeight("10");
+        lineItems.setDepth("5");
+        lineItems.setPerson_name("Johnny Is");
+        lineItems.setPrice("10000");
+        lineItems.setQuantity(2);
+        lineItems.setSku("4343434343");
+        lineItems.setTemperature(Order.TEMP_AMBIENT);
+        lineItems.setWeight("12");
+        lineItems.setUnit("ft");
+        orderCreateParams.setItems(new OrderLineItems[] {lineItems});
+
 
         JsonObject createResponse = brawndo.order.create(orderCreateParams);
         System.out.println("++++++++++++++++++++++++++++++");
@@ -208,6 +236,10 @@ public class DropoffApp {
         System.out.println("++++++++++++++++++++++++++++++");
         System.out.println("Create Order: " + createResponse.toString());
         String created_order_id = createResponse.get("data").getAsJsonObject().get("order_id").getAsString();
+        System.out.println(created_order_id);
+
+
+
 
         System.out.println("------------------------------");
         System.out.println("Adding Tip");
@@ -248,6 +280,11 @@ public class DropoffApp {
         System.out.println("Cancelled Order: " + cancelResponse.toString());
 
         //brawndo.order.simulate("austin");
+
+
+
+
+
         brawndo.shutdown();
     }
 }
