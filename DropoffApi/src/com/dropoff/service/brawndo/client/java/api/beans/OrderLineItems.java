@@ -2,16 +2,16 @@ package com.dropoff.service.brawndo.client.java.api.beans;
 
 public class OrderLineItems {
 
-    private int container;
+    private Integer container;
     private String description;
     private String width;
     private String height;
     private String depth;
     private String person_name;
     private String price;
-    private int quantity;
+    private Integer quantity;
     private String sku;
-    private int temperature;
+    private Integer temperature;
     private String weight;
     private String unit;
     private OrderLineItems[] nested_items;
