@@ -38,6 +38,7 @@ public class Order {
     public static int CONTAINER_CASE = 900;
     public static int CONTAINER_COOLER = 1000;
     public static int CONTAINER_CRATE = 1100;
+    public static int CONTAINER_TOTE = 1200;
 
     public Order(Client client) {
         this.client = client;
