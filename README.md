@@ -17,6 +17,7 @@ This is the 3rd party dropoff Java client for creating and viewing orders.
     - [Getting Your Account Info](#client_info)
     - [Enterprise Managed Clients](#managed_clients)
     - [Order Properties](#order_properties)
+    - [Order Items](#order_items)
     - [Getting Pricing Estimates](#estimates)
     - [Placing an Order](#placing)
     - [Cancelling an Order](#cancel)
@@ -254,6 +255,45 @@ An example of a successful response will look like this:
 - **conflicts** - an array of other property ids that cannot be included in an order when this property is set.  In the above response you cannot set both "Leave at Door" and "Signature Required".
 - **requires** - an array of other property ids that must be included in an order when this property is set.  In the above response, when "Legal Filing" is set on an order, then "Signature Required" should be set as well.    
 
+
+
+### Getting Available Order Items <a id="order_items"></a>
+An order can be created with order line items such as quantity, or temperature. To use a line item, the line item must be enabled for your account. To see which order line items are available for your account, use the **Available Items** function. Order line item constants are in Order.java.
+
+	//companyId is optional
+	GetAvailableItemsParameters getAvailableItemsParameters = new GetAvailableItemsParameters();
+    getAvailableItemsParameters.setCompanyId(companyId);
+    JsonObject availableItems = brawndo.order.availableItems(getAvailableItemsParameters);
+    System.out.println(availableItems.toString());
+
+An example of a successful response will look like this:
+
+    {
+      "data": {
+        "order_item_allow_sku": 2,
+        "company_id": "7df2b0bdb418157609c0d5766fb7fb12",
+        "order_item_allow_weight": 2,
+        "order_item_enabled": 2,
+        "order_item_allow_person_name": 2,
+        "order_item_allow_quantity": 2,
+        "order_item_allow_description": 2,
+        "order_item_person_name_label": "Recipient",
+        "order_item_allow_dimensions": 2,
+        "order_item_allow_container": 2,
+        "order_item_temp_unit": "F",
+        "order_item_allow_price": 2,
+        "order_item_allow_temperature": 1
+      },
+      "success": true,
+      "timestamp": "2018-12-20T16:38:23Z"
+    }
+
+* **0** - the order item type is disabled
+* **1** - the order item type is optional
+* **2** - the order item type is enabled
+
+
+
 ### Getting Pricing Estimates <a id="estimates"></a>
 
 Before you place an order you will first want to estimate the distance, eta, and cost for the delivery.  The client provides an **Estimate** function for this operation.
@@ -432,6 +472,29 @@ The properties section is an array of [property ids](#order_properties) to add t
 
 This is an optional piece of data.
 
+#### Order Items data.
+
+The order items section is an array of [items](#order_items) to add to the order. This is an optional piece of data.
+
+    OrderLineItems lineItem1 = new OrderLineItems();
+    lineItems.setContainer(Order.CONTAINER_BOX);
+    lineItems.setDescription("Please be descriptive about your description");
+    lineItems.setWidth("50");
+    lineItems.setHeight("10");
+    lineItems.setDepth("5");
+    lineItems.setPerson_name("Johnny Is");
+    lineItems.setPrice("10000");
+    lineItems.setQuantity(2);
+    lineItems.setSku("4343434343");
+    lineItems.setTemperature(Order.TEMP_REFRIGERATED);
+    lineItems.setWeight("12");
+    lineItems.setUnit("ft");
+    
+Add all order items to an array. Add the array to OrderCreateParams
+
+    OrderLineItems[] allItems = new OrderLineItems[] {lineItem1};
+    orderCreateParams.setItems(allItems);
+
 Once this data is created, you can create the order.
 
     JsonObject createResponse = brawndo.order.create(orderCreateParams);
@@ -445,6 +508,7 @@ The data in the callback will contain the id of the new order as well as the url
     
     String created_order_id = createResponse.get("data").getAsJsonObject().get("order_id").getAsString();
     String created_order_url = createResponse.get("data").getAsJsonObject().get("url").getAsString();
+    
 
 ### Cancelling an order <a id="cancel"></a>
 
@@ -548,20 +612,40 @@ Example response
                  market: 'austin',
                  remarks: 'Be nice to napoleon'
              },
-                          properties : [
-             		{
-      					"id": 2,
-      					"label": "Signature Required",
-      					"description": "Signature is required for this order.",
-			      		"price_adjustment": 0
-    				},
-    				{
-      					"id": 3,
-      					"label": "Legal Filing",
-      					"description": "This order is a legal filing at the court house. Please read order remarks carefully.",
-			      		"price_adjustment": 5.50
-    				}
-             ]
+             properties : [
+					{
+						"id": 2,
+						"label": "Signature Required",
+						"description": "Signature is required for this order.",
+						"price_adjustment": 0
+					},
+					{
+						"id": 3,
+						"label": "Legal Filing",
+						"description": "This order is a legal filing at the court house. Please read order remarks carefully.",
+						"price_adjustment": 5.50
+					}
+				],
+             items: [
+				  {
+				    "container": 200,
+				    "quantity": 2,
+				    "weight": 5,
+				    "description": "this order is very important",
+				    "createdate": 1545410919,
+				    "person_name": "John McJohn",
+				    "order_item_id": "46b30a26358dfd799ae764c90850ccfc",
+				    "unit": "ft",
+				    "depth": 5,
+				    "updatedate": 1545410919,
+				    "price": 10.55,
+				    "temperature": 0,
+				    "width": 4,
+				    "sku": "123456123456",
+				    "order_id": "7826566d9d16095e79c019c389c667b6",
+				    "height": 4
+				  }
+    		],
         },
         success: true,
         timestamp: '2015-03-09T18:42:15+00:00'
