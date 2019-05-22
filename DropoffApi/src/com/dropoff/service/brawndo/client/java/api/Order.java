@@ -45,6 +45,18 @@ public class Order {
         tip = new Tip(client);
     }
 
+    public JsonObject getDriverActionsMeta(GetDriverActionsMetaParameters parameters) {
+        Map<String,String> query = new HashMap<String,String>();
+
+        String path = "/driver_actions_meta";
+
+        if(parameters.getCompanyId() != null) {
+            query.put("company_id", parameters.getCompanyId());
+        }
+
+        return client.doGet("/order/driver_actions_meta", "order", query);
+    }
+
     public JsonObject availableItems(GetAvailableItemsParameters parameters) {
         Map<String,String> query = new HashMap<String,String>();
 

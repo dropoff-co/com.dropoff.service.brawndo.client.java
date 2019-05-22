@@ -272,6 +272,7 @@ public class Client {
             result = response.get().getRespObj();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
         return result;
     }
