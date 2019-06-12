@@ -18,6 +18,8 @@ public class OrderCreateAddress {
     public double lng = 0.0;
     public String remarks;
 
+    public String driver_actions;
+
     public OrderCreateAddress() {
     }
 
@@ -123,5 +125,13 @@ public class OrderCreateAddress {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getDriver_actions() {
+        return driver_actions;
+    }
+
+    public void setDriverActions(String driver_actions) {
+        this.driver_actions = driver_actions;
     }
 }

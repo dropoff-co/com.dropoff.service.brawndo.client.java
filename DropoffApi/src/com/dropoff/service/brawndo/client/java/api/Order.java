@@ -45,6 +45,18 @@ public class Order {
         tip = new Tip(client);
     }
 
+    public JsonObject getDriverActionsMeta(GetDriverActionsMetaParameters parameters) {
+        Map<String,String> query = new HashMap<String,String>();
+
+        String path = "/driver_actions_meta";
+
+        if(parameters.getCompanyId() != null) {
+            query.put("company_id", parameters.getCompanyId());
+        }
+
+        return client.doGet("/order/driver_actions_meta", "order", query);
+    }
+
     public JsonObject availableItems(GetAvailableItemsParameters parameters) {
         Map<String,String> query = new HashMap<String,String>();
 
@@ -114,6 +126,24 @@ public class Order {
         }
 
         String path = "/order/signature";
+
+        if (parameters.getOrderId() != null) {
+            path += "/" + parameters.getOrderId();
+        } else {
+            throw new IllegalArgumentException("order_id should not be null");
+        }
+
+        return client.doGet(path, "order", query);
+    }
+
+    public JsonObject getPickupSignature(OrderGetParameters parameters) throws IllegalArgumentException {
+        Map<String,String> query = new HashMap<String,String>();
+
+        if (parameters.getCompanyId() != null) {
+            query.put("company_id", parameters.getCompanyId());
+        }
+
+        String path = "/order/pickup_signature";
 
         if (parameters.getOrderId() != null) {
             path += "/" + parameters.getOrderId();
