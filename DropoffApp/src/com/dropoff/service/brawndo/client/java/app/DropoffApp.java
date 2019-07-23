@@ -215,6 +215,8 @@ public class DropoffApp {
         originParams.setLat(30.263706);
         originParams.setLng(-97.741703);
         originParams.setRemarks("Origin Remarks");
+//        originParams.setEmailNotifications(false);
+        originParams.setSmsNotifications(true);
 //        originParams.setDriverActions("1100,1300");
         orderCreateParams.setOrigin(originParams);
 
@@ -232,6 +234,8 @@ public class DropoffApp {
         destinationParams.setLat(30.260228);
         destinationParams.setLng(-97.793359);
         destinationParams.setRemarks("Please use the front entrance. The back on is guarded by cats!");
+//        destinationParams.setEmailNotifications(false);
+//        destinationParams.setSmsNotifications(true);
 //        destinationParams.setDriverActions("2100,2200");
         orderCreateParams.setDestination(destinationParams);
 
