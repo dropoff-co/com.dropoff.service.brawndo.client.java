@@ -17,8 +17,9 @@ public class OrderCreateAddress {
     public double lat = 0.0;
     public double lng = 0.0;
     public String remarks;
-
     public String driver_actions;
+    public Boolean email_notifications;
+    public Boolean sms_notifications;
 
     public OrderCreateAddress() {
     }
@@ -133,5 +134,21 @@ public class OrderCreateAddress {
 
     public void setDriverActions(String driver_actions) {
         this.driver_actions = driver_actions;
+    }
+
+    public Boolean getEmailNotifications() {
+        return email_notifications;
+    }
+
+    public void setEmailNotifications(Boolean email_notifications) {
+        this.email_notifications = email_notifications;
+    }
+
+    public Boolean getSmsNotifications() {
+        return sms_notifications;
+    }
+
+    public void setSmsNotifications(Boolean sms_notifications) {
+        this.sms_notifications = sms_notifications;
     }
 }
