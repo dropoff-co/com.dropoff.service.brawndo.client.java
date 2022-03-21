@@ -1,6 +1,7 @@
 package com.dropoff.service.brawndo.client.java.app;
 
 import com.dropoff.service.brawndo.client.java.api.Order;
+
 import com.dropoff.service.brawndo.client.java.api.beans.*;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -18,10 +19,10 @@ public class DropoffApp {
     public static void main(String[] args) {
         System.out.println("HelloWorld!");
         ApiV1 brawndo = new ApiV1();
-        String url = "https://sandbox-brawndo.dropoff.com/v1";
-        String host = "sandbox-brawndo.dropoff.com";
-        String private_key = "";
-        String public_key = "";
+        String url = "http://127.0.0.1:9094/v1";
+        String host = "127.0.0.1:9094";
+        String private_key = "6cc3fcf4b4db7b7550fc53414d4d1c15afe5ab0e65c7c6d1afcfce39c501861c";
+        String public_key = "bce5d3e8dff43743d6a1a241694e247a33dc35cf23fb3e36d727a0fa62179b4b";
 
         brawndo.initialize(url, host, private_key, public_key);
         System.out.println("------------------------------");
@@ -35,221 +36,229 @@ public class DropoffApp {
         } else {
             System.out.println("Info: NULL");
         }
-
-        String companyId = info.getAsJsonObject("data").getAsJsonObject("client").get("id").getAsString();
-
-
-//        AvailablePropertiesParameters propsGetParams = new AvailablePropertiesParameters();
-//        //propsGetParams.setCompanyId(companyId);
+        
+        BulkCreateParameters bulkparams = new BulkCreateParameters();
+        bulkparams.filename = "./shortest copy.csv";
+        JsonObject bulk = brawndo.bulk.create(bulkparams);
+        if (bulk != null) {
+            System.out.println("Info: " + bulk.toString());
+        } else {
+            System.out.println("Info: NULL");
+        }
+//        String companyId = info.getAsJsonObject("data").getAsJsonObject("client").get("id").getAsString();
+//
+//
+////        AvailablePropertiesParameters propsGetParams = new AvailablePropertiesParameters();
+////        //propsGetParams.setCompanyId(companyId);
+////        System.out.println("------------------------------");
+////        System.out.println("Getting Company Properties");
+////        JsonObject props = brawndo.order.availableProperties(propsGetParams);
+////        System.out.println("++++++++++++++++++++++++++++++");
+////        System.out.println("++++++++++++++++++++++++++++++");
+////        System.out.println("++++++++++++++++++++++++++++++");
+////        if (props != null) {
+////            System.out.println("Properties: " + props.toString());
+////        } else {
+////            System.out.println("Properties: NULL");
+////        }
+////
+//        String orderId = "";
+//        OrderGetParameters signatureGetParams = new OrderGetParameters();
+//        signatureGetParams.setOrderId(orderId);
 //        System.out.println("------------------------------");
-//        System.out.println("Getting Company Properties");
-//        JsonObject props = brawndo.order.availableProperties(propsGetParams);
+//        System.out.println("Getting Order Signature");
+//        JsonObject signature = brawndo.order.getSignature(signatureGetParams);
 //        System.out.println("++++++++++++++++++++++++++++++");
 //        System.out.println("++++++++++++++++++++++++++++++");
 //        System.out.println("++++++++++++++++++++++++++++++");
-//        if (props != null) {
-//            System.out.println("Properties: " + props.toString());
+//        if (signature != null) {
+//            System.out.println("Signature: " + signature.toString());
 //        } else {
-//            System.out.println("Properties: NULL");
+//            System.out.println("Signature: NULL");
 //        }
 //
-        String orderId = "";
-        OrderGetParameters signatureGetParams = new OrderGetParameters();
-        signatureGetParams.setOrderId(orderId);
-        System.out.println("------------------------------");
-        System.out.println("Getting Order Signature");
-        JsonObject signature = brawndo.order.getSignature(signatureGetParams);
-        System.out.println("++++++++++++++++++++++++++++++");
-        System.out.println("++++++++++++++++++++++++++++++");
-        System.out.println("++++++++++++++++++++++++++++++");
-        if (signature != null) {
-            System.out.println("Signature: " + signature.toString());
-        } else {
-            System.out.println("Signature: NULL");
-        }
-
-        OrderGetParameters pickupSignatureGetParams = new OrderGetParameters();
-        pickupSignatureGetParams.setOrderId(orderId);
-        System.out.println("------------------------------");
-        System.out.println("Getting Order Pickup Signature");
-        JsonObject pickupSignature = brawndo.order.getPickupSignature(pickupSignatureGetParams);
-        System.out.println("++++++++++++++++++++++++++++++");
-        System.out.println("++++++++++++++++++++++++++++++");
-        System.out.println("++++++++++++++++++++++++++++++");
-        if (signature != null) {
-            System.out.println("Pickup Signature: " + pickupSignature.toString());
-        } else {
-            System.out.println("Pickup Signature: NULL");
-        }
-//
-//
-        OrderGetParameters orderGetParams = new OrderGetParameters();
-//
+//        OrderGetParameters pickupSignatureGetParams = new OrderGetParameters();
+//        pickupSignatureGetParams.setOrderId(orderId);
 //        System.out.println("------------------------------");
-//        System.out.println("Getting Order Page");
-//        JsonObject page = brawndo.order.get(orderGetParams);
+//        System.out.println("Getting Order Pickup Signature");
+//        JsonObject pickupSignature = brawndo.order.getPickupSignature(pickupSignatureGetParams);
 //        System.out.println("++++++++++++++++++++++++++++++");
 //        System.out.println("++++++++++++++++++++++++++++++");
 //        System.out.println("++++++++++++++++++++++++++++++");
-//        System.out.println("OrderPage: " + page.toString());
-//
-//        String page1LastKey = page.get("last_key").getAsString();
-//
-//        if (page.get("last_key") != null) {
-//            orderGetParams.setLastKey(page.get("last_key").getAsString());
+//        if (signature != null) {
+//            System.out.println("Pickup Signature: " + pickupSignature.toString());
+//        } else {
+//            System.out.println("Pickup Signature: NULL");
+//        }
+////
+////
+//        OrderGetParameters orderGetParams = new OrderGetParameters();
+////
+////        System.out.println("------------------------------");
+////        System.out.println("Getting Order Page");
+////        JsonObject page = brawndo.order.get(orderGetParams);
+////        System.out.println("++++++++++++++++++++++++++++++");
+////        System.out.println("++++++++++++++++++++++++++++++");
+////        System.out.println("++++++++++++++++++++++++++++++");
+////        System.out.println("OrderPage: " + page.toString());
+////
+////        String page1LastKey = page.get("last_key").getAsString();
+////
+////        if (page.get("last_key") != null) {
+////            orderGetParams.setLastKey(page.get("last_key").getAsString());
+////        }
+////
+////        System.out.println("------------------------------");
+////        System.out.println("Getting Order Page 2");
+////        page = brawndo.order.get(orderGetParams);
+////        System.out.println("++++++++++++++++++++++++++++++");
+////        System.out.println("++++++++++++++++++++++++++++++");
+////        System.out.println("++++++++++++++++++++++++++++++");
+////        System.out.println("Order Page 2: " + page.toString());
+////
+////        String page2LastKey = page.get("last_key").getAsString();
+////
+////        System.out.println("page1LastKey: " + page1LastKey);
+////        System.out.println("page2LastKey: " + page2LastKey);
+////        System.out.println("last keys are equal? " + (page1LastKey == page2LastKey));
+////
+////        JsonElement order = page.get("data").getAsJsonArray().get(0);
+////        String order_id = order.getAsJsonObject().get("details").getAsJsonObject().get("order_id").getAsString();
+////
+//        System.out.println("------------------------------");
+////        System.out.println("Getting order_id: " + order_id);
+//        orderGetParams = new OrderGetParameters();
+//        orderGetParams.setOrderId(orderId);
+//        JsonObject anOrder = brawndo.order.get(orderGetParams);
+//        System.out.println("++++++++++++++++++++++++++++++");
+//        System.out.println("++++++++++++++++++++++++++++++");
+//        System.out.println("++++++++++++++++++++++++++++++");
+//        System.out.println("An order: " + anOrder.toString());
+////
+////        System.out.println("------------------------------");
+////        System.out.println("Getting available order items");
+////        GetAvailableItemsParameters getAvailableItemsParameters = new GetAvailableItemsParameters();
+////        getAvailableItemsParameters.setCompanyId(companyId);
+////        JsonObject availableItems = brawndo.order.availableItems(getAvailableItemsParameters);
+////        System.out.println("++++++++++++++++++++++++++++++");
+////        System.out.println("++++++++++++++++++++++++++++++");
+////        System.out.println("++++++++++++++++++++++++++++++");
+////        System.out.println("Available items: " + availableItems.toString());
+////
+//        System.out.println("------------------------------");
+//        System.out.println("Getting driver actions meta");
+//        GetDriverActionsMetaParameters getDriverActionsMetaParameters = new GetDriverActionsMetaParameters();
+//        getDriverActionsMetaParameters.setCompanyId(companyId);
+//        JsonObject driverActionsMeta = null;
+//        try {
+//            driverActionsMeta = brawndo.order.getDriverActionsMeta(getDriverActionsMetaParameters);
+//            System.out.println("++++++++++++++++++++++++++++++");
+//            System.out.println("++++++++++++++++++++++++++++++");
+//            System.out.println("++++++++++++++++++++++++++++++");
+//            System.out.println("Driver Actions Meta: " + driverActionsMeta.toString());
+//        } catch (Exception e) {
+//            e.printStackTrace();
 //        }
 //
 //        System.out.println("------------------------------");
-//        System.out.println("Getting Order Page 2");
-//        page = brawndo.order.get(orderGetParams);
-//        System.out.println("++++++++++++++++++++++++++++++");
-//        System.out.println("++++++++++++++++++++++++++++++");
-//        System.out.println("++++++++++++++++++++++++++++++");
-//        System.out.println("Order Page 2: " + page.toString());
-//
-//        String page2LastKey = page.get("last_key").getAsString();
-//
-//        System.out.println("page1LastKey: " + page1LastKey);
-//        System.out.println("page2LastKey: " + page2LastKey);
-//        System.out.println("last keys are equal? " + (page1LastKey == page2LastKey));
-//
-//        JsonElement order = page.get("data").getAsJsonArray().get(0);
-//        String order_id = order.getAsJsonObject().get("details").getAsJsonObject().get("order_id").getAsString();
-//
-        System.out.println("------------------------------");
-//        System.out.println("Getting order_id: " + order_id);
-        orderGetParams = new OrderGetParameters();
-        orderGetParams.setOrderId(orderId);
-        JsonObject anOrder = brawndo.order.get(orderGetParams);
-        System.out.println("++++++++++++++++++++++++++++++");
-        System.out.println("++++++++++++++++++++++++++++++");
-        System.out.println("++++++++++++++++++++++++++++++");
-        System.out.println("An order: " + anOrder.toString());
+//        System.out.println("Getting Order Estimate");
+//        EstimateParameters estimateParams = new EstimateParameters();
+//        estimateParams.setOrigin("117 San Jacinto Blvd, Austin, TX 78701");
+//        estimateParams.setDestination("1601 S MoPac Expy, Austin, TX 78746");
+//        SimpleDateFormat sdf = new SimpleDateFormat("zzz");
+//        estimateParams.setUtcOffset(sdf.format(new Date()));
+//        JsonObject estimate = null;
+//        try {
+//            estimate = brawndo.order.estimate(estimateParams);
+//            System.out.println("++++++++++++++++++++++++++++++");
+//            System.out.println("++++++++++++++++++++++++++++++");
+//            System.out.println("++++++++++++++++++++++++++++++");
+//            System.out.println("Estimate: " + estimate.toString());
+//        } catch (IllegalArgumentException iae) {
+//            iae.printStackTrace();
+//        }
 //
 //        System.out.println("------------------------------");
-//        System.out.println("Getting available order items");
-//        GetAvailableItemsParameters getAvailableItemsParameters = new GetAvailableItemsParameters();
-//        getAvailableItemsParameters.setCompanyId(companyId);
-//        JsonObject availableItems = brawndo.order.availableItems(getAvailableItemsParameters);
-//        System.out.println("++++++++++++++++++++++++++++++");
-//        System.out.println("++++++++++++++++++++++++++++++");
-//        System.out.println("++++++++++++++++++++++++++++++");
-//        System.out.println("Available items: " + availableItems.toString());
+//        System.out.println("Getting Order Estimate 2");
+//        Calendar tomorrowTenAM = Calendar.getInstance();
+//        tomorrowTenAM.setTime(new Date());
+//        tomorrowTenAM.set(Calendar.HOUR_OF_DAY, 0);
+//        tomorrowTenAM.set(Calendar.MINUTE, 0);
+//        tomorrowTenAM.set(Calendar.SECOND, 0);
+//        tomorrowTenAM.add(Calendar.DATE, 1);
+//        tomorrowTenAM.add(Calendar.HOUR, 10);
+//        estimateParams.setUtcOffset(sdf.format(tomorrowTenAM.getTime()));
+//        long tomorrowTenAMSeconds = tomorrowTenAM.getTimeInMillis()/1000;
+//        estimateParams.setReadyTimestamp(tomorrowTenAMSeconds);
 //
-        System.out.println("------------------------------");
-        System.out.println("Getting driver actions meta");
-        GetDriverActionsMetaParameters getDriverActionsMetaParameters = new GetDriverActionsMetaParameters();
-        getDriverActionsMetaParameters.setCompanyId(companyId);
-        JsonObject driverActionsMeta = null;
-        try {
-            driverActionsMeta = brawndo.order.getDriverActionsMeta(getDriverActionsMetaParameters);
-            System.out.println("++++++++++++++++++++++++++++++");
-            System.out.println("++++++++++++++++++++++++++++++");
-            System.out.println("++++++++++++++++++++++++++++++");
-            System.out.println("Driver Actions Meta: " + driverActionsMeta.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("------------------------------");
-        System.out.println("Getting Order Estimate");
-        EstimateParameters estimateParams = new EstimateParameters();
-        estimateParams.setOrigin("117 San Jacinto Blvd, Austin, TX 78701");
-        estimateParams.setDestination("1601 S MoPac Expy, Austin, TX 78746");
-        SimpleDateFormat sdf = new SimpleDateFormat("zzz");
-        estimateParams.setUtcOffset(sdf.format(new Date()));
-        JsonObject estimate = null;
-        try {
-            estimate = brawndo.order.estimate(estimateParams);
-            System.out.println("++++++++++++++++++++++++++++++");
-            System.out.println("++++++++++++++++++++++++++++++");
-            System.out.println("++++++++++++++++++++++++++++++");
-            System.out.println("Estimate: " + estimate.toString());
-        } catch (IllegalArgumentException iae) {
-            iae.printStackTrace();
-        }
-
-        System.out.println("------------------------------");
-        System.out.println("Getting Order Estimate 2");
-        Calendar tomorrowTenAM = Calendar.getInstance();
-        tomorrowTenAM.setTime(new Date());
-        tomorrowTenAM.set(Calendar.HOUR_OF_DAY, 0);
-        tomorrowTenAM.set(Calendar.MINUTE, 0);
-        tomorrowTenAM.set(Calendar.SECOND, 0);
-        tomorrowTenAM.add(Calendar.DATE, 1);
-        tomorrowTenAM.add(Calendar.HOUR, 10);
-        estimateParams.setUtcOffset(sdf.format(tomorrowTenAM.getTime()));
-        long tomorrowTenAMSeconds = tomorrowTenAM.getTimeInMillis()/1000;
-        estimateParams.setReadyTimestamp(tomorrowTenAMSeconds);
-
-        try {
-            estimate = brawndo.order.estimate(estimateParams);
-            System.out.println("++++++++++++++++++++++++++++++");
-            System.out.println("++++++++++++++++++++++++++++++");
-            System.out.println("++++++++++++++++++++++++++++++");
-            System.out.println("Estimate 2: " + estimate.toString());
-        } catch (IllegalArgumentException iae) {
-            iae.printStackTrace();
-        }
-
-
-        System.out.println("------------------------------");
-        System.out.println("Creating Order");
-        OrderCreateParameters orderCreateParams = new OrderCreateParameters();
-//        orderCreateParams.setCompanyId("7df2b0bdb418157609c0d5766fb7fb12");
-        orderCreateParams.setCompanyId(companyId);
-//        int[] createOrderProps = {1};
-//        orderCreateParams.setProperties(createOrderProps);
-
-        OrderCreateAddress originParams = new OrderCreateAddress();
-        originParams.setCompanyName("Dropoff Java Origin");
-        originParams.setFirstName("Napoleon");
-        originParams.setLastName("Bonner");
-        originParams.setAddressLine1("117 San Jacinto Blvd");
-        //originParams.setAddressLine2("");
-        originParams.setCity("Austin");
-        originParams.setState("TX");
-        originParams.setZip("78701");
-        originParams.setPhone("5125555555");
-        originParams.setEmail("noreply+origin@dropoff.com");
-        originParams.setLat(30.263706);
-        originParams.setLng(-97.741703);
-        originParams.setRemarks("Origin Remarks");
-//        originParams.setEmailNotifications(false);
-        originParams.setSmsNotifications(true);
-//        originParams.setDriverActions("1100,1300");
-        orderCreateParams.setOrigin(originParams);
-
-        OrderCreateAddress destinationParams = new OrderCreateAddress();
-        destinationParams.setCompanyName("Dropoff Java Destination");
-        destinationParams.setFirstName("Del");
-        destinationParams.setLastName("Fitzgitibit");
-        destinationParams.setAddressLine1("1601 S MoPac Expy");
-        destinationParams.setAddressLine2("C301");
-        destinationParams.setCity("Austin");
-        destinationParams.setState("TX");
-        destinationParams.setZip("78746");
-        destinationParams.setPhone("512-555-5555");
-        destinationParams.setEmail("noreply+destination@dropoff.com");
-        destinationParams.setLat(30.260228);
-        destinationParams.setLng(-97.793359);
-        destinationParams.setRemarks("Please use the front entrance. The back on is guarded by cats!");
-//        destinationParams.setEmailNotifications(false);
-//        destinationParams.setSmsNotifications(true);
-//        destinationParams.setDriverActions("2100,2200");
-        orderCreateParams.setDestination(destinationParams);
-
-        OrderCreateDetails details = new OrderCreateDetails();
-        details.setReadyDate(tomorrowTenAMSeconds);
-        details.setType("two_hr");
-        details.setQuantity(10);
-        details.setWeight(20);
-        details.setDistance("5");
-        details.setEta("15");
-        details.setPrice("10");
-        details.setReferenceCode("");
-        details.setReferenceName("");
-        orderCreateParams.setDetails(details);
+//        try {
+//            estimate = brawndo.order.estimate(estimateParams);
+//            System.out.println("++++++++++++++++++++++++++++++");
+//            System.out.println("++++++++++++++++++++++++++++++");
+//            System.out.println("++++++++++++++++++++++++++++++");
+//            System.out.println("Estimate 2: " + estimate.toString());
+//        } catch (IllegalArgumentException iae) {
+//            iae.printStackTrace();
+//        }
+//
+//
+//        System.out.println("------------------------------");
+//        System.out.println("Creating Order");
+//        OrderCreateParameters orderCreateParams = new OrderCreateParameters();
+////        orderCreateParams.setCompanyId("7df2b0bdb418157609c0d5766fb7fb12");
+//        orderCreateParams.setCompanyId(companyId);
+////        int[] createOrderProps = {1};
+////        orderCreateParams.setProperties(createOrderProps);
+//
+//        OrderCreateAddress originParams = new OrderCreateAddress();
+//        originParams.setCompanyName("Dropoff Java Origin");
+//        originParams.setFirstName("Napoleon");
+//        originParams.setLastName("Bonner");
+//        originParams.setAddressLine1("117 San Jacinto Blvd");
+//        //originParams.setAddressLine2("");
+//        originParams.setCity("Austin");
+//        originParams.setState("TX");
+//        originParams.setZip("78701");
+//        originParams.setPhone("5125555555");
+//        originParams.setEmail("noreply+origin@dropoff.com");
+//        originParams.setLat(30.263706);
+//        originParams.setLng(-97.741703);
+//        originParams.setRemarks("Origin Remarks");
+////        originParams.setEmailNotifications(false);
+//        originParams.setSmsNotifications(true);
+////        originParams.setDriverActions("1100,1300");
+//        orderCreateParams.setOrigin(originParams);
+//
+//        OrderCreateAddress destinationParams = new OrderCreateAddress();
+//        destinationParams.setCompanyName("Dropoff Java Destination");
+//        destinationParams.setFirstName("Del");
+//        destinationParams.setLastName("Fitzgitibit");
+//        destinationParams.setAddressLine1("1601 S MoPac Expy");
+//        destinationParams.setAddressLine2("C301");
+//        destinationParams.setCity("Austin");
+//        destinationParams.setState("TX");
+//        destinationParams.setZip("78746");
+//        destinationParams.setPhone("512-555-5555");
+//        destinationParams.setEmail("noreply+destination@dropoff.com");
+//        destinationParams.setLat(30.260228);
+//        destinationParams.setLng(-97.793359);
+//        destinationParams.setRemarks("Please use the front entrance. The back on is guarded by cats!");
+////        destinationParams.setEmailNotifications(false);
+////        destinationParams.setSmsNotifications(true);
+////        destinationParams.setDriverActions("2100,2200");
+//        orderCreateParams.setDestination(destinationParams);
+//
+//        OrderCreateDetails details = new OrderCreateDetails();
+//        details.setReadyDate(tomorrowTenAMSeconds);
+//        details.setType("two_hr");
+//        details.setQuantity(10);
+//        details.setWeight(20);
+//        details.setDistance("5");
+//        details.setEta("15");
+//        details.setPrice("10");
+//        details.setReferenceCode("");
+//        details.setReferenceName("");
+//        orderCreateParams.setDetails(details);
 
 //        OrderLineItems lineItems = new OrderLineItems();
 //        lineItems.setContainer(Order.CONTAINER_BOX);

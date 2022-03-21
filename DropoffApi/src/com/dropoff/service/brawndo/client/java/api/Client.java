@@ -29,6 +29,15 @@ import com.google.gson.JsonParser;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.apache.hc.client5.http.entity.mime.FileBody;
+import java.io.File;
+import org.apache.hc.client5.http.entity.mime.StringBody;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+
+
+
 /**
  * Created by jasonkastner on 7/3/17.
  */
@@ -216,8 +225,22 @@ public class Client {
             authHeader += ",Signature=" + authHash;
 
             con.addRequestProperty("Authorization", authHeader);
+            if (payload != null && path == "/bulkupload") {
+                System.out.println("here");
+                System.out.println(payload);
+                String boundary = "-----stackoverflow--------" + System.currentTimeMillis();
 
-            if (payload != null) {
+                con.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+
+                con.setDoOutput(true);
+                FileBody bin = new FileBody(new File(payload));
+
+                HttpEntity reqEntity = MultipartEntityBuilder.create()
+                	.setBoundary(boundary)
+                    .addPart("file", bin)
+                    .build();
+                reqEntity.writeTo(con.getOutputStream());
+            } else if (payload != null) {
                 //String encodedContent = URLEncoder.encode(payload, "UTF-8");
                 con.setDoOutput(true);
                 con.setDoInput(true);
@@ -226,10 +249,12 @@ public class Client {
                 wr.flush();
                 wr.close();
             }
+            System.out.println(path);
+
 
             int responseCode = con.getResponseCode();
             BufferedReader in;
-
+            System.out.println("response code" + responseCode);
             if(responseCode >= 400) {
                 in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
             } else {
@@ -269,6 +294,20 @@ public class Client {
         try {
             //result = this.doRequest("POST", path, resource, query, payload);
             Future<Response> response = executor.submit(new Request("POST", path, resource, query, payload));
+            result = response.get().getRespObj();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return result;
+    }
+
+    public JsonObject doCsvPost(String path, String resource, Map<String,String> query, String filename) {
+        System.out.println("do csv post");
+        JsonObject result = null;
+        try {
+            //result = this.doRequest("POST", path, resource, query, payload);
+            Future<Response> response = executor.submit(new Request("POST", path, resource, query, filename));
             result = response.get().getRespObj();
         } catch (Exception e) {
             e.printStackTrace();

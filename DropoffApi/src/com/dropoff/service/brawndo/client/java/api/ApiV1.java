@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 public class ApiV1 {
     private Client client;
     public Order order;
+    public Bulk bulk;
 
     public ApiV1() {
     }
@@ -15,6 +16,7 @@ public class ApiV1 {
     public void initialize(String apiUrl, String host, String privateKey, String publicKey) {
         client = new Client(apiUrl, host, privateKey, publicKey);
         order = new Order(client);
+        bulk = new Bulk(client);
     }
 
     public JsonObject info() {
