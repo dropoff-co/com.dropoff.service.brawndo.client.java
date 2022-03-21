@@ -8,8 +8,6 @@ import com.dropoff.service.brawndo.client.java.api.beans.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import org.apache.hc.core5.http.HttpEntity;
-
 
 public class Bulk {
   private Client client;
@@ -38,5 +36,12 @@ public class Bulk {
     
     return client.doCsvPost("/bulkupload", "bulkupload", query, filename);
 
+  }
+
+  public JsonObject cancel(BulkCancelParameters parameters) {
+    System.out.println(parameters.toString());
+    String bulk_id = parameters.getBulkId();
+    System.out.println(bulk_id);
+    return client.doPut("/bulkupload/"+bulk_id, "bulkupload", null, null);
   }
 }

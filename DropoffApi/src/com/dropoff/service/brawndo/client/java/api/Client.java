@@ -228,7 +228,7 @@ public class Client {
             if (payload != null && path == "/bulkupload") {
                 System.out.println("here");
                 System.out.println(payload);
-                String boundary = "-----stackoverflow--------" + System.currentTimeMillis();
+                String boundary = "-------------------------" + System.currentTimeMillis();
 
                 con.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
 
@@ -322,6 +322,16 @@ public class Client {
             //result = this.doRequest("DELETE", path, resource, query, null);
             Future<Response> response = executor.submit(new Request("DELETE", path, resource, query, null));
             result = response.get().getRespObj();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public JsonObject doPut(String path, String resource, Map<String,String> query, String payload) {
+        JsonObject result = null;
+        try {
+            Future<Response> response = executor.submit(new Request("PUT", path, resource, query, payload));
         } catch (Exception e) {
             e.printStackTrace();
         }

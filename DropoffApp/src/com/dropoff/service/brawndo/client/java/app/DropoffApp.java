@@ -19,10 +19,10 @@ public class DropoffApp {
     public static void main(String[] args) {
         System.out.println("HelloWorld!");
         ApiV1 brawndo = new ApiV1();
-        String url = "http://127.0.0.1:9094/v1";
-        String host = "127.0.0.1:9094";
-        String private_key = "6cc3fcf4b4db7b7550fc53414d4d1c15afe5ab0e65c7c6d1afcfce39c501861c";
-        String public_key = "bce5d3e8dff43743d6a1a241694e247a33dc35cf23fb3e36d727a0fa62179b4b";
+        String url = "https://sandbox-brawndo.dropoff.com/v1";
+        String host = "sandbox-brawndo.dropoff.com";
+        String private_key = "";
+        String public_key = "";
 
         brawndo.initialize(url, host, private_key, public_key);
         System.out.println("------------------------------");
@@ -38,12 +38,21 @@ public class DropoffApp {
         }
         
         BulkCreateParameters bulkparams = new BulkCreateParameters();
-        bulkparams.filename = "./shortest copy.csv";
+        bulkparams.filename = "./bulk-small.numbers";
         JsonObject bulk = brawndo.bulk.create(bulkparams);
         if (bulk != null) {
             System.out.println("Info: " + bulk.toString());
         } else {
             System.out.println("Info: NULL");
+        }
+        BulkCancelParameters bulkcancelparams = new BulkCancelParameters();
+        bulkcancelparams.bulk_id = "466c8a6e9dd7fb7eefc07c2dd1685c45";
+        JsonObject bulkCancel = brawndo.bulk.cancel(bulkcancelparams);
+
+        if (bulkCancel != null) {
+            System.out.println("..." +bulkCancel.toString());
+        } else {
+            System.out.println("...nope");
         }
 //        String companyId = info.getAsJsonObject("data").getAsJsonObject("client").get("id").getAsString();
 //
